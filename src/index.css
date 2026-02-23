@@ -1,84 +1,59 @@
 /* =========================================================
-   MarketMind — Global Design System (DRD v1.0)
-   Fonts: Syne (headings) · DM Sans (body) · JetBrains Mono (code)
+   MarketMind — Warm Editorial Design System
+   Fonts: Playfair Display (headings) · Plus Jakarta Sans (body)
    ========================================================= */
 @import "tailwindcss";
 
 /* ── CUSTOM PROPERTIES ── */
 :root {
-  /* Colours */
-  --navy: #0D1B2E;
-  --navy-mid: #162540;
-  --navy-light: #1E3A5F;
-  --blue: #2F80ED;
-  --blue-bright: #4F9EFF;
-  --cyan: #22D3EE;
-  --gold: #F59E0B;
-  --surface: #EBF4FF;
-  --white: #FFFFFF;
-  --gray: #94A3B8;
-  --gray-light: #CBD5E1;
-  --text-dim: #64748B;
-  --green: #10B981;
-  --red: #EF4444;
-  --amber: #F59E0B;
+  /* Editorial Palette */
+  --bg-page: #F7F3EE;
+  --bg-surface: #FFFFFF;
+  --bg-input: #EDE6DA;
+  --bg-hover: #E5DDD0;
+  --border-default: #D9CEBA;
+  --bg-sidebar: #1A1A18;
+
+  /* Text */
+  --text-primary: #1A1A18;
+  --text-body: #2E2E2C;
+  --text-secondary: #6B6560;
+  --text-placeholder: #9E9790;
+
+  /* Accent: Warm Orange */
+  --accent: #E86A2A;
+  --accent-hover: #C85820;
+  --accent-soft: #FBF0E8;
+  --accent-border: #F0C8A8;
+
+  /* Feedback */
+  --success: #2A7A50;
+  --success-bg: #E8F5EE;
+  --warning: #946010;
+  --warning-bg: #FEF3E2;
+  --error: #A02828;
+  --error-bg: #FDECEA;
 
   /* Typography */
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Radii */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-  --radius-full: 9999px;
-
   /* Shadows */
-  --shadow-blue: 0 4px 20px rgba(47, 128, 237, 0.35);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
+  --shadow-warm: 0 4px 20px rgba(26, 26, 24, 0.08);
+  --shadow-focus: 0 0 0 3px #FBF0E8;
 
-/* ── LIGHT MODE OVERRIDES ── */
-body.light-mode {
-  --navy: #F8FAFC;
-  --navy-mid: #FFFFFF;
-  --navy-light: #F1F5F9;
-  --surface: #DBEAFE;
-  --white: #0F172A;
-  --gray: #475569;
-  --gray-light: #64748B;
-  --text-dim: #94A3B8;
-  --color-accent: #2F80ED;
-}
-
-body.light-mode .drd-card {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(47, 128, 237, 0.1);
-  box-shadow: 0 4px 12px rgba(47, 128, 237, 0.05);
-}
-
-body.light-mode .drd-input {
-  background: #fff;
-  border-color: #E2E8F0;
-  color: #0F172A;
-}
-
-body.light-mode .drd-input:focus {
-  border-color: var(--blue);
-}
-
-body.light-mode .drd-label {
-  color: #64748B;
-}
-
-body.light-mode ::-webkit-scrollbar-track {
-  background: #F1F5F9;
-}
-
-body.light-mode ::-webkit-scrollbar-thumb {
-  background: rgba(47, 128, 237, 0.2);
+  /* Legacy variable mapping to prevent breakage in components still using old variables */
+  --navy: var(--bg-page);
+  --navy-mid: var(--bg-input);
+  --navy-light: var(--bg-hover);
+  --blue: var(--accent);
+  --blue-bright: var(--accent);
+  --cyan: var(--accent);
+  --gold: var(--accent);
+  --white: var(--text-primary);
+  --gray: var(--text-secondary);
+  --text-dim: var(--text-placeholder);
 }
 
 /* ── RESET ── */
@@ -96,30 +71,29 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--navy);
-  color: var(--white);
+  background: var(--bg-page);
+  color: var(--text-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-}
-
-/* ── BG GRID HELPER ── */
-.drd-grid {
-  background-image:
-    linear-gradient(rgba(47, 128, 237, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(47, 128, 237, 0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
 }
 
 /* ── TYPOGRAPHY ── */
 h1,
 h2,
 h3,
-h4 {
+h4,
+.display-font {
   font-family: var(--font-display);
+  color: var(--text-primary);
   font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+}
+
+.large-number {
+  font-family: var(--font-display);
+  font-weight: 900;
 }
 
 .mono {
@@ -128,28 +102,16 @@ h4 {
 
 /* ── CARDS ── */
 .drd-card {
-  background: rgba(30, 58, 95, 0.35);
-  border: 1px solid rgba(47, 128, 237, 0.18);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(8px);
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s, background 0.3s;
-}
-
-.drd-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(79, 158, 255, 0.4), transparent);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-warm);
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .drd-card:hover {
-  border-color: rgba(79, 158, 255, 0.45);
-  background: rgba(30, 58, 95, 0.55);
+  border-color: var(--accent-border);
   transform: translateY(-2px);
 }
 
@@ -157,23 +119,23 @@ h4 {
 .btn-drd-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  border-radius: 8px;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   border: none;
-  background: var(--blue);
-  color: #fff;
-  box-shadow: var(--shadow-blue);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--accent);
+  color: #FFFFFF;
+  transition: all 0.2s ease;
 }
 
 .btn-drd-primary:hover {
+  background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(47, 128, 237, 0.5);
 }
 
 .btn-drd-primary:active {
@@ -183,101 +145,92 @@ h4 {
 .btn-drd-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  border-radius: 8px;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  background: transparent;
-  color: var(--blue-bright);
-  border: 1px solid rgba(79, 158, 255, 0.35);
-  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  border: none;
+  background: var(--text-primary);
+  color: #FFFFFF;
+  transition: all 0.2s ease;
 }
 
 .btn-drd-secondary:hover {
-  border-color: var(--blue-bright);
-  background: rgba(79, 158, 255, 0.08);
+  opacity: 0.9;
   transform: translateY(-1px);
 }
 
 .btn-drd-ghost {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  border-radius: 8px;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  background: transparent;
-  color: var(--gray);
-  border: none;
-  transition: color 0.2s;
+  background: #FFFFFF;
+  color: var(--text-body);
+  border: 1px solid var(--border-default);
+  transition: all 0.2s ease;
 }
 
 .btn-drd-ghost:hover {
-  color: var(--white);
+  background: var(--bg-hover);
+  border-color: var(--text-secondary);
 }
 
 /* ── FORM INPUTS ── */
 .drd-input {
   width: 100%;
-  padding: 10px 14px;
-  border-radius: var(--radius-md);
-  background: rgba(13, 27, 46, 0.7);
-  border: 1px solid rgba(47, 128, 237, 0.25);
-  color: var(--white);
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  color: var(--text-body);
   font-family: var(--font-body);
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
 
 .drd-input:focus {
-  border-color: var(--blue-bright);
-  box-shadow: 0 0 0 3px rgba(79, 158, 255, 0.15);
+  background: var(--bg-surface);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-focus);
 }
 
 .drd-input::placeholder {
-  color: var(--gray);
+  color: var(--text-placeholder);
 }
 
 .drd-label {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--gray);
+  color: var(--text-secondary);
   margin-bottom: 8px;
 }
 
-/* ── PILL / BADGE ── */
+/* ── PILLS & BADGES ── */
 .drd-pill {
   display: inline-flex;
-  align-items: center;
-  gap: 6px;
   padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: var(--blue-bright);
-  background: rgba(47, 128, 237, 0.1);
-  border: 1px solid rgba(47, 128, 237, 0.3);
-}
-
-/* ── SECTION LABEL ── */
-.drd-section-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--blue-bright);
-  margin-bottom: 14px;
+  border-radius: 20px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 /* ── STREAMING CURSOR ── */
@@ -382,23 +335,23 @@ h4 {
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--navy-mid);
+  background: var(--bg-page);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(47, 128, 237, 0.3);
-  border-radius: 3px;
+  background: var(--border-default);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(79, 158, 255, 0.5);
+  background: var(--text-secondary);
 }
 
-/* ── UTILITY ── */
+/* ── UTILITIES ── */
 .text-blue {
   color: var(--blue-bright);
 }
@@ -417,4 +370,27 @@ h4 {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.bg-warm {
+  background: var(--bg-page);
+}
+
+/* Animation Overrides */
+.pulse-dot {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.stream-cursor {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
 }

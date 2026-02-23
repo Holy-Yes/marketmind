@@ -22,39 +22,42 @@ const perf = [
 ];
 
 const LandingPage = () => (
-    <div style={{ background: 'var(--navy)', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
         <Navbar />
         <Hero />
 
         {/* ── DESIGN GOALS ── */}
-        <section id="features" style={{ padding: '96px 0', position: 'relative', background: 'rgba(13,27,46,0.5)' }}>
-            <div className="drd-grid" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.5 }} />
+        <section id="features" style={{ padding: '120px 0', position: 'relative', background: '#FFFFFF', borderTop: '1px solid var(--border-default)', borderBottom: '1px solid var(--border-default)' }}>
+            <div className="drd-grid" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.3 }} />
             <div style={{ position: 'relative', maxWidth: 1200, margin: '0 auto', padding: '0 32px' }}>
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 56 }}>
-                    <div className="drd-pill" style={{ display: 'inline-flex', marginBottom: 20 }}>
-                        02 — Design Goals
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 72 }}>
+                    <div className="drd-pill" style={{ display: 'inline-flex', marginBottom: 20, background: 'var(--accent-soft)', border: '1px solid var(--accent)', color: 'var(--accent)' }}>
+                        02 — PHILOSOPHY
                     </div>
-                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px,3.5vw,48px)', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff', marginBottom: 14 }}>
-                        What we're <span style={{ color: 'var(--blue-bright)' }}>designing for</span>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px,4.5vw,60px)', fontWeight: 900, letterSpacing: '-0.03em', color: 'var(--text-primary)', marginBottom: 20 }}>
+                        Engineered for <br /><span style={{ color: 'var(--accent)' }}>cognitive dominance</span>
                     </h2>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--gray)', maxWidth: 520, margin: '0 auto' }}>
-                        Every decision traced back to four core principles that make MarketMind feel premium, not generic.
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: 'var(--text-body)', maxWidth: 560, margin: '0 auto', lineHeight: 1.7, fontWeight: 500 }}>
+                        Every line of code is traced back to four foundational principles that define the MarketMind experience.
                     </p>
                 </motion.div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 16 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20 }}>
                     {goals.map((g, i) => (
                         <motion.div
                             key={g.tag}
-                            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                            className="drd-card"
-                            style={{ padding: '22px 24px' }}
+                            initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                            style={{
+                                padding: '32px', background: 'var(--bg-page)', borderRadius: 20, border: '1px solid var(--border-default)',
+                                boxShadow: 'var(--shadow-warm)', transition: 'all 0.3s ease'
+                            }}
+                            whileHover={{ y: -8, borderColor: 'var(--accent)', boxShadow: '0 20px 40px -12px rgba(232, 106, 42, 0.12)' }}
                         >
-                            <span style={{ fontSize: 24, display: 'block', marginBottom: 12 }}>{g.icon}</span>
-                            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: '#fff', marginBottom: 8 }}>{g.title}</div>
-                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--gray)', lineHeight: 1.65, marginBottom: 14 }}>{g.body}</p>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--blue-bright)', background: 'rgba(47,128,237,0.1)', padding: '3px 8px', borderRadius: 4 }}>{g.tag}</span>
+                            <span style={{ fontSize: 32, display: 'block', marginBottom: 20 }}>{g.icon}</span>
+                            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 20, color: 'var(--text-primary)', marginBottom: 12 }}>{g.title}</div>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--text-body)', lineHeight: 1.7, marginBottom: 24, fontWeight: 500 }}>{g.body}</p>
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: 10, fontWeight: 800, letterSpacing: '0.12em', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '6px 12px', borderRadius: 8, textTransform: 'uppercase' }}>{g.tag}</span>
                         </motion.div>
                     ))}
                 </div>
@@ -65,28 +68,30 @@ const LandingPage = () => (
         <Outcomes />
 
         {/* ── PERFORMANCE TARGETS ── */}
-        <section style={{ padding: '80px 0', background: 'var(--navy)', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,rgba(47,128,237,0.3),transparent)' }} />
+        <section style={{ padding: '100px 0', background: 'var(--bg-page)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,var(--border-default),transparent)' }} />
             <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px' }}>
-                <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 48 }}>
-                    <div className="drd-pill" style={{ display: 'inline-flex', marginBottom: 20 }}>
-                        10 — Performance Design
+                <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 56 }}>
+                    <div className="drd-pill" style={{ display: 'inline-flex', marginBottom: 20, background: 'var(--accent-soft)', border: '1px solid var(--accent)', color: 'var(--accent)' }}>
+                        10 — LATENCY BENCHMARKS
                     </div>
-                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px,3vw,40px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-                        Speed <span style={{ color: 'var(--blue-bright)' }}>targets</span>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                        Performance <span style={{ color: 'var(--accent)' }}>thresholds</span>
                     </h2>
                 </motion.div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 16 }}>
                     {perf.map(({ v, l }, i) => (
                         <motion.div
                             key={l}
-                            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                            className="drd-card"
-                            style={{ padding: '20px 16px', textAlign: 'center' }}
+                            style={{
+                                padding: '32px 24px', textAlign: 'center', background: '#FFFFFF', borderRadius: 16, border: '1px solid var(--border-default)',
+                                boxShadow: 'var(--shadow-warm)'
+                            }}
                         >
-                            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 32, color: 'var(--blue-bright)', marginBottom: 6 }}>{v}</div>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--gray)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{l}</div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 40, color: 'var(--accent)', marginBottom: 8 }}>{v}</div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--text-secondary)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 800 }}>{l}</div>
                         </motion.div>
                     ))}
                 </div>
@@ -94,26 +99,40 @@ const LandingPage = () => (
         </section>
 
         {/* ── CTA ── */}
-        <section style={{ padding: '96px 32px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(47,128,237,0.14), transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <section style={{ padding: '120px 32px', textAlign: 'center', position: 'relative', overflow: 'hidden', background: '#FFFFFF' }}>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 800, borderRadius: '50%', background: 'radial-gradient(circle, rgba(232, 106, 42, 0.06), transparent 70%)', filter: 'blur(100px)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
                 <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                    <div className="drd-pill" style={{ display: 'inline-flex', marginBottom: 24 }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--blue-bright)', boxShadow: '0 0 8px var(--blue-bright)', animation: 'pulse-dot 2s ease infinite' }} />
-                        DRD STATUS — ACTIVE
+                    <div className="drd-pill" style={{ display: 'inline-flex', marginBottom: 28, background: 'var(--accent-soft)', border: '1px solid var(--accent)', color: 'var(--accent)' }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 12px var(--accent)', animation: 'pulse-dot 2s ease infinite' }} />
+                        SYSTEM STATUS — ONLINE
                     </div>
-                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,4.5vw,60px)', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', marginBottom: 20, lineHeight: 1.05 }}>
-                        Ready to feel<br /><span style={{ color: 'var(--blue-bright)' }}>the difference?</span>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,6vw,72px)', fontWeight: 900, letterSpacing: '-0.03em', color: 'var(--text-primary)', marginBottom: 24, lineHeight: 1 }}>
+                        Experience the <br /><span style={{ color: 'var(--accent)' }}>new standard.</span>
                     </h2>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: 'var(--gray)', lineHeight: 1.7, maxWidth: 500, margin: '0 auto 40px' }}>
-                        Join 2,000+ marketers using MarketMind to generate smarter campaigns, score better leads, and close more deals — all in seconds.
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 20, color: 'var(--text-body)', lineHeight: 1.7, maxWidth: 600, margin: '0 auto 48px', fontWeight: 500 }}>
+                        Join a select group of marketers leveraging cognitive AI to orchestrate campaigns, synthesize intelligence, and close deals in milliseconds.
                     </p>
-                    <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Link to="/register" className="btn-drd-primary" style={{ fontSize: 16, padding: '14px 36px', borderRadius: 'var(--radius-lg)' }}>
-                            Register Free →
+                    <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <Link to="/register"
+                            style={{
+                                fontSize: 18, padding: '18px 48px', borderRadius: 14, background: 'var(--accent)', color: '#FFFFFF', fontWeight: 800, textDecoration: 'none',
+                                boxShadow: '0 8px 16px rgba(232, 106, 42, 0.2)', transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                            onMouseLeave={e => e.currentTarget.style.transform = ''}
+                        >
+                            Start Initialization →
                         </Link>
-                        <Link to="/login" className="btn-drd-secondary" style={{ fontSize: 16, padding: '14px 36px', borderRadius: 'var(--radius-lg)' }}>
-                            ⚡ Demo Access
+                        <Link to="/login"
+                            style={{
+                                fontSize: 18, padding: '18px 48px', borderRadius: 14, background: '#FFFFFF', border: '1px solid var(--border-default)', color: 'var(--text-primary)', fontWeight: 700, textDecoration: 'none',
+                                boxShadow: 'var(--shadow-warm)', transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
+                            onMouseLeave={e => e.currentTarget.style.background = '#FFFFFF'}
+                        >
+                            ⚡ Demo Terminal
                         </Link>
                     </div>
                 </motion.div>
@@ -122,18 +141,19 @@ const LandingPage = () => (
 
         {/* ── FOOTER ── */}
         <footer style={{
-            borderTop: '1px solid rgba(47,128,237,0.12)',
-            padding: '28px 32px',
+            borderTop: '1px solid var(--border-default)',
+            padding: '40px 32px',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             maxWidth: 1200, margin: '0 auto',
+            background: 'var(--bg-page)'
         }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 14, letterSpacing: '0.08em', color: '#fff' }}>MARKETMIND</span>
-            <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 16, letterSpacing: '0.04em', color: 'var(--text-primary)' }}>MARKETMIND</span>
+            <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
                 {['Privacy', 'Terms', 'Docs', 'Support'].map(l => (
-                    <a key={l} href="#" style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-dim)', textDecoration: 'none' }}>{l}</a>
+                    <a key={l} href="#" style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 700 }}>{l}</a>
                 ))}
             </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>© 2026 MarketMind</span>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--text-secondary)', fontWeight: 600 }}>© 2026 Cognitive Systems Corp</span>
         </footer>
     </div>
 );

@@ -28,35 +28,35 @@ export default function GeneratePosts() {
         <div style={{ padding: '24px 28px' }}>
             {/* DRD Header */}
             <div style={{ marginBottom: 32 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(244,114,182,0.15)', border: '1px solid rgba(244,114,182,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Camera size={18} color="#f472b6" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <div style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Camera size={20} color="var(--accent)" />
                     </div>
                     <div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#f472b6', letterSpacing: '0.12em' }}>02 — INSTAGRAM STUDIO</div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', fontWeight: 700 }}>Social Prompt & Concept Lab</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, color: 'var(--accent)', letterSpacing: '0.12em' }}>02 — SOCIAL STUDIO</div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--text-primary)', fontWeight: 800 }}>Social Prompt & Concept Lab</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, background: 'rgba(244,114,182,0.15)', color: '#f472b6', padding: '2px 8px', borderRadius: 4 }}>Multi-Model Engine</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)', padding: '2px 8px' }}>↙ LAST RUN &lt; 60s</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 9, background: 'var(--accent)', color: '#FFFFFF', padding: '3px 10px', borderRadius: 4 }}>STRATEGIC ENGINE</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 9, color: 'var(--text-secondary)', padding: '3px 8px' }}>↙ LATENCY &lt; 60s</span>
                 </div>
             </div>
 
             {/* DRD Context Layer */}
             <div style={{ marginBottom: 32 }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--text-dim)', marginBottom: 12 }}>CONTEXT LAYERS</div>
+                <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: 12 }}>CONTEXT LAYERS</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(13,27,46,0.3)', border: '1px solid rgba(244,114,182,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Database size={14} color="#f472b6" />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: form.product_description ? '#fff' : 'var(--text-dim)' }}>
-                            {form.product_description ? 'Product context active' : 'Awaiting product description'}
+                    <div style={{ padding: '12px 16px', borderRadius: 10, background: '#F9F9F9', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <Database size={14} color="var(--accent)" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: form.product_description ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                            {form.product_description ? 'Product intelligence active' : 'Awaiting product description'}
                         </span>
-                        {form.product_description && <Zap size={10} color="#f472b6" style={{ marginLeft: 'auto' }} />}
+                        {form.product_description && <Zap size={11} color="var(--accent)" fill="var(--accent)" style={{ marginLeft: 'auto' }} />}
                     </div>
-                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(13,27,46,0.3)', border: '1px solid rgba(244,114,182,0.05)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Brain size={14} color="var(--text-dim)" />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-dim)' }}>No brand voice profile uploaded</span>
+                    <div style={{ padding: '12px 16px', borderRadius: 10, background: '#F9F9F9', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <Brain size={14} color="var(--text-secondary)" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)' }}>No brand voice profile detected</span>
                     </div>
                 </div>
             </div>
@@ -80,11 +80,11 @@ export default function GeneratePosts() {
                         <button key={t}
                             onClick={() => set('post_type', t)}
                             style={{
-                                padding: '6px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
+                                padding: '8px 16px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                 transition: 'all 0.2s', cursor: 'pointer',
-                                background: form.post_type === t ? '#f472b6' : 'rgba(22,37,64,0.6)',
-                                border: form.post_type === t ? '1px solid #f472b6' : '1px solid rgba(244,114,182,0.1)',
-                                color: form.post_type === t ? 'var(--navy)' : '#fff', fontWeight: form.post_type === t ? 600 : 400
+                                background: form.post_type === t ? 'var(--accent)' : '#FFFFFF',
+                                border: form.post_type === t ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.post_type === t ? '#FFFFFF' : 'var(--text-primary)', fontWeight: form.post_type === t ? 700 : 500
                             }}
                         >
                             {t}
@@ -101,7 +101,7 @@ export default function GeneratePosts() {
     );
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1 }}>
                 <GenerationCanvas

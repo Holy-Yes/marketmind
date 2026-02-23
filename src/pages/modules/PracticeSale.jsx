@@ -97,36 +97,36 @@ export default function PracticeSale() {
         <div style={{ padding: '24px 28px' }}>
             {/* DRD Header */}
             <div style={{ marginBottom: 32 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <MessageSquare size={18} color="var(--gold)" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <div style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <MessageSquare size={20} color="var(--accent)" />
                     </div>
                     <div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', letterSpacing: '0.12em' }}>06 — SALES SIMULATOR</div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', fontWeight: 700 }}>AI Role-Play with Voice</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, color: 'var(--accent)', letterSpacing: '0.12em' }}>06 — PERFORMANCE SIMULATOR</div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--text-primary)', fontWeight: 800 }}>AI Role-Play Studio</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, background: 'rgba(245,158,11,0.15)', color: 'var(--gold)', padding: '2px 8px', borderRadius: 4 }}>Groq LLaMA 70B</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)', padding: '2px 8px' }}>↙ LATENCY &lt; 500ms</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 9, background: 'var(--accent)', color: '#FFFFFF', padding: '3px 10px', borderRadius: 4 }}>STRATEGIC VOICE ENGINE</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 9, color: 'var(--text-secondary)', padding: '3px 8px' }}>↙ LATENCY &lt; 500ms</span>
                 </div>
             </div>
 
             {/* DRD Context Layer */}
             <div style={{ marginBottom: 32 }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--text-dim)', marginBottom: 12 }}>CONTEXT LAYERS</div>
+                <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: 12 }}>CONTEXT LAYERS</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(13,27,46,0.3)', border: '1px solid rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <User size={14} color="var(--gold)" />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#fff' }}>
+                    <div style={{ padding: '12px 16px', borderRadius: 10, background: '#F9F9F9', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <User size={14} color="var(--accent)" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-primary)' }}>
                             {form.buyer_persona} persona loaded
                         </span>
-                        <Zap size={10} color="var(--gold)" style={{ marginLeft: 'auto' }} />
+                        <Zap size={11} color="var(--accent)" fill="var(--accent)" style={{ marginLeft: 'auto' }} />
                     </div>
-                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(13,27,46,0.3)', border: '1px solid rgba(245,158,11,0.05)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Mic size={14} color={recording ? 'var(--red)' : 'var(--text-dim)'} />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: recording ? 'var(--red)' : 'var(--text-dim)' }}>
-                            {recording ? 'Recording in progress...' : 'Voice response: Ready'}
+                    <div style={{ padding: '12px 16px', borderRadius: 10, background: '#F9F9F9', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <Mic size={14} color={recording ? 'var(--red)' : 'var(--text-secondary)'} />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: recording ? 'var(--red)' : 'var(--text-secondary)' }}>
+                            {recording ? 'Recording session...' : 'Voice capture: Active'}
                         </span>
                     </div>
                 </div>
@@ -138,35 +138,36 @@ export default function PracticeSale() {
                     <button
                         onClick={clearConversation}
                         className="btn-drd-ghost"
-                        style={{ width: '100%', border: '1px solid rgba(239,68,68,0.3)', color: 'var(--red)', background: 'rgba(239,68,68,0.05)', fontSize: 11 }}
+                        style={{ width: '100%', border: '1px solid rgba(239,68,68,0.2)', color: 'var(--red)', background: 'rgba(239,68,68,0.05)', fontSize: 11, padding: '10px' }}
                     >
-                        <Trash2 size={12} /> Reset Simulation & Memory
+                        <Trash2 size={12} /> Reset Simulation Memory
                     </button>
                 </div>
             )}
 
             {/* Voice Recording Section */}
-            <div style={{ marginBottom: 24, padding: 16, background: 'rgba(34,211,238,0.05)', border: '1px solid rgba(34,211,238,0.15)', borderRadius: 12 }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--cyan)', marginBottom: 12, letterSpacing: '0.05em' }}>PRACTICE RESPONSE</div>
+            <div style={{ marginBottom: 24, padding: 20, background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 12, boxShadow: 'var(--shadow-warm)' }}>
+                <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, color: 'var(--text-secondary)', marginBottom: 16, letterSpacing: '0.05em' }}>VOICE CAPTURE PERFORMANCE</div>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                     <button
                         onClick={recording ? stopRecording : startRecording}
                         style={{
-                            flex: 1, padding: '10px 16px', borderRadius: 10,
-                            background: recording ? 'rgba(239,68,68,0.2)' : 'rgba(34,211,238,0.15)',
-                            border: `1px solid ${recording ? 'var(--red)' : 'var(--cyan)'}`,
-                            color: recording ? 'var(--red)' : 'var(--cyan)',
-                            fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 600,
-                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+                            flex: 1, padding: '12px 20px', borderRadius: 10,
+                            background: recording ? 'rgba(239,68,68,0.1)' : 'var(--bg-hover)',
+                            border: `1px solid ${recording ? 'var(--red)' : 'var(--border-default)'}`,
+                            color: recording ? 'var(--red)' : 'var(--text-primary)',
+                            fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 700,
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                            transition: 'all 0.2s'
                         }}
                     >
                         {recording ? (
                             <>
-                                <Square size={16} /> Stop Recording
+                                <Square size={16} fill="var(--red)" /> Stop Session
                             </>
                         ) : (
                             <>
-                                <Mic size={16} /> Record Response
+                                <Mic size={16} color="var(--accent)" /> Initialize Mic
                             </>
                         )}
                     </button>
@@ -197,11 +198,11 @@ export default function PracticeSale() {
                         <button key={p}
                             onClick={() => set('buyer_persona', p)}
                             style={{
-                                padding: '10px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 13,
+                                padding: '12px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 13,
                                 transition: 'all 0.15s', cursor: 'pointer', textAlign: 'left',
-                                background: form.buyer_persona === p ? 'rgba(245,158,11,0.15)' : 'rgba(22,37,64,0.4)',
-                                border: form.buyer_persona === p ? '1px solid var(--gold)' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.buyer_persona === p ? 'var(--gold)' : 'var(--gray)', fontWeight: form.buyer_persona === p ? 600 : 400
+                                background: form.buyer_persona === p ? 'var(--accent)' : '#FFFFFF',
+                                border: form.buyer_persona === p ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.buyer_persona === p ? '#FFFFFF' : 'var(--text-primary)', fontWeight: form.buyer_persona === p ? 700 : 500
                             }}
                         >
                             {p}
@@ -224,7 +225,7 @@ export default function PracticeSale() {
     );
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1 }}>
                 <GenerationCanvas
@@ -235,18 +236,18 @@ export default function PracticeSale() {
                 />
                 {followUpQuestions.length > 0 && (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{
-                        position: 'fixed', bottom: 20, right: 20, width: 300, background: 'rgba(13,27,46,0.95)',
-                        border: '1px solid rgba(34,211,238,0.3)', borderRadius: 12, padding: 20, zIndex: 10
+                        position: 'fixed', bottom: 20, right: 20, width: 300, background: '#FFFFFF',
+                        border: '1px solid var(--border-default)', borderRadius: 16, padding: 24, zIndex: 10, boxShadow: 'var(--shadow-warm)'
                     }}>
-                        <h4 style={{ color: 'var(--cyan)', fontSize: 13, marginBottom: 12, fontWeight: 600, fontFamily: 'var(--font-mono)', letterSpacing: '0.05em' }}>📋 FOLLOW-UP QUESTIONS</h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <h4 style={{ color: 'var(--text-primary)', fontSize: 11, marginBottom: 16, fontWeight: 700, fontFamily: 'var(--font-body)', letterSpacing: '0.1em' }}>STRATEGIC FOLLOW-UPS</h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                             {followUpQuestions.map((q, i) => (
                                 <button key={i}
                                     onClick={() => set('product_context', q)}
                                     style={{
-                                        padding: '8px 12px', borderRadius: 8, background: 'rgba(34,211,238,0.1)',
-                                        border: '1px solid rgba(34,211,238,0.2)', color: 'var(--gray)', fontFamily: 'var(--font-body)',
-                                        fontSize: 12, textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s'
+                                        padding: '10px 14px', borderRadius: 8, background: 'var(--bg-input)',
+                                        border: '1px solid var(--border-default)', color: 'var(--text-body)', fontFamily: 'var(--font-body)',
+                                        fontSize: 12, textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s', lineHeight: 1.4
                                     }}
                                 >
                                     {q.replace(/^\d+\.\s*/, '')}

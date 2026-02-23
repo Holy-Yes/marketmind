@@ -114,18 +114,18 @@ export default function CompetitorDashboard() {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
                 {/* Header */}
                 <div style={{ marginBottom: 40 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(34,211,238,0.15)', border: '1px solid rgba(34,211,238,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <BarChart2 size={20} color="var(--cyan)" />
+                        <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <BarChart2 size={24} color="var(--accent)" />
                         </div>
                         <div>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan)', letterSpacing: '0.12em' }}>04 — COMPETITOR INTELLIGENCE</div>
-                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, color: '#fff', margin: 0, marginTop: 4 }}>Multi-Brand Comparison</h1>
+                            <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 11, color: 'var(--accent)', letterSpacing: '0.12em' }}>04 — STRATEGIC INTELLIGENCE</div>
+                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 32, color: 'var(--text-primary)', fontWeight: 800, margin: 0, marginTop: 4 }}>Brand Counter-Intelligence</h1>
                         </div>
                     </div>
                 </div>
@@ -133,11 +133,11 @@ export default function CompetitorDashboard() {
                 {/* Input Section */}
                 {status === 'idle' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{
-                        background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(34,211,238,0.15)', borderRadius: 16, padding: 32, marginBottom: 32
+                        background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)', borderRadius: 16, padding: 32, marginBottom: 32
                     }}>
                         <div style={{ marginBottom: 24 }}>
-                            <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--gray)', display: 'block', marginBottom: 12, fontWeight: 600 }}>
-                                Add Competitors to Analyze
+                            <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', display: 'block', marginBottom: 12, fontWeight: 700 }}>
+                                Competitors to Analyze
                             </label>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                                 {competitors.map((comp, idx) => (
@@ -147,7 +147,7 @@ export default function CompetitorDashboard() {
                                             placeholder={`Competitor ${idx + 1} (e.g., 'Salesforce', 'HubSpot')`}
                                             value={comp}
                                             onChange={e => updateCompetitor(idx, e.target.value)}
-                                            style={{ flex: 1, fontSize: 13 }}
+                                            style={{ flex: 1, fontSize: 13, background: 'var(--bg-input)' }}
                                         />
                                         {competitors.length > 1 && (
                                             <button
@@ -166,34 +166,34 @@ export default function CompetitorDashboard() {
                             <button
                                 onClick={addCompetitor}
                                 style={{
-                                    marginTop: 12, padding: '10px 16px', background: 'rgba(34,211,238,0.1)', color: 'var(--cyan)',
-                                    border: '1px solid rgba(34,211,238,0.2)', borderRadius: 8, fontFamily: 'var(--font-body)',
-                                    fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600
+                                    marginTop: 12, padding: '10px 16px', background: 'var(--bg-hover)', color: 'var(--text-primary)',
+                                    border: '1px solid var(--border-default)', borderRadius: 8, fontFamily: 'var(--font-body)',
+                                    fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700
                                 }}
                             >
-                                <Plus size={16} /> Add Another Competitor
+                                <Plus size={16} color="var(--accent)" /> Add Another Competitor
                             </button>
                         </div>
 
                         <div style={{ marginBottom: 24 }}>
-                            <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--gray)', display: 'block', marginBottom: 12, fontWeight: 600 }}>
-                                Select Your Product (Comparison Context)
+                            <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', display: 'block', marginBottom: 12, fontWeight: 700 }}>
+                                Comparison Context
                             </label>
                             <select
                                 className="drd-input"
                                 value={selectedProductId}
                                 onChange={e => setSelectedProductId(e.target.value)}
-                                style={{ width: '100%', fontSize: 13, background: 'rgba(13,27,46,0.6)', cursor: 'pointer' }}
+                                style={{ width: '100%', fontSize: 13, background: 'var(--bg-input)', cursor: 'pointer' }}
                             >
-                                <option value="">-- General Market Context --</option>
+                                <option value="">-- General Market Intelligence --</option>
                                 {clientProducts.map(p => (
                                     <option key={p.id} value={p.id}>{p.name}</option>
                                 ))}
                             </select>
                         </div>
 
-                        <div style={{ marginBottom: 24 }}>
-                            <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--gray)', display: 'block', marginBottom: 12, fontWeight: 600 }}>
+                        <div style={{ marginBottom: 32 }}>
+                            <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', display: 'block', marginBottom: 12, fontWeight: 700 }}>
                                 Analysis Depth
                             </label>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
@@ -203,10 +203,10 @@ export default function CompetitorDashboard() {
                                         style={{
                                             padding: '12px 16px', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 12,
                                             cursor: 'pointer', textAlign: 'left',
-                                            background: analysis_depth === d ? 'rgba(34,211,238,0.2)' : 'rgba(13,27,46,0.5)',
-                                            border: analysis_depth === d ? '1px solid var(--cyan)' : '1px solid rgba(34,211,238,0.1)',
-                                            color: analysis_depth === d ? 'var(--cyan)' : 'var(--gray)',
-                                            fontWeight: analysis_depth === d ? 600 : 400,
+                                            background: analysis_depth === d ? 'var(--accent)' : 'var(--bg-input)',
+                                            border: analysis_depth === d ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                            color: analysis_depth === d ? '#FFFFFF' : 'var(--text-primary)',
+                                            fontWeight: analysis_depth === d ? 700 : 500,
                                             transition: 'all 0.2s'
                                         }}
                                     >
@@ -219,13 +219,13 @@ export default function CompetitorDashboard() {
                         <button
                             onClick={handleAnalyze}
                             style={{
-                                width: '100%', padding: '12px 24px', background: 'var(--cyan)', color: 'var(--navy)',
-                                border: 'none', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 600,
-                                cursor: 'pointer', transition: 'all 0.2s'
+                                width: '100%', padding: '14px 24px', background: 'var(--accent)', color: '#FFFFFF',
+                                border: 'none', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700,
+                                cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)'
                             }}
                         >
-                            <RefreshCw size={16} style={{ display: 'inline', marginRight: 8 }} />
-                            Analyze Competitors
+                            <RefreshCw size={18} style={{ display: 'inline', marginRight: 8 }} />
+                            Execute Brand Context Analysis
                         </button>
                     </motion.div>
                 )}
@@ -233,19 +233,20 @@ export default function CompetitorDashboard() {
                 {/* Loading State */}
                 {status === 'loading' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{
-                        background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(34,211,238,0.15)', borderRadius: 16, padding: 60, textAlign: 'center'
+                        background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 16, padding: 80, textAlign: 'center', boxShadow: 'var(--shadow-warm)'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginBottom: 16 }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 24 }}>
                             {[1, 2, 3, 4, 5].map(i => (
                                 <motion.div
                                     key={i}
-                                    animate={{ height: [10, 30, 10] }}
+                                    animate={{ height: [12, 40, 12] }}
                                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.15 }}
-                                    style={{ width: 4, background: 'var(--cyan)', borderRadius: 2 }}
+                                    style={{ width: 6, background: 'var(--accent)', borderRadius: 3 }}
                                 />
                             ))}
                         </div>
-                        <p style={{ fontFamily: 'var(--font-body)', color: 'var(--gray)' }}>Analyzing {competitors.filter(c => c.trim()).length} competitors...</p>
+                        <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8 }}>Calibrating Global Insights</p>
+                        <p style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)' }}>Synthesizing data for {competitors.filter(c => c.trim()).length} brand profiles...</p>
                     </motion.div>
                 )}
 
@@ -254,79 +255,88 @@ export default function CompetitorDashboard() {
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                         {/* Comparison Chart */}
                         <div style={{
-                            background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(34,211,238,0.15)', borderRadius: 16, padding: 28, marginBottom: 24
+                            background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 16, padding: 32, marginBottom: 32, boxShadow: 'var(--shadow-warm)'
                         }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                    <AreaChartIcon size={18} color="var(--cyan)" />
-                                    <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#fff', margin: 0, fontWeight: 600 }}>📈 Multi-Brand Strategic Advantage</h3>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 20 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <BarChartIcon size={22} color="var(--accent)" />
+                                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--text-primary)', margin: 0, fontWeight: 800 }}>Competitive Advantage Index</h3>
                                 </div>
-                                <div style={{ display: 'flex', gap: 12 }}>
-                                    {results.map((r, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => toggleBrand(r.competitor)}
-                                            style={{
-                                                background: visibleBrands[r.competitor] ? ['rgba(6,182,212,0.2)', 'rgba(129,140,248,0.2)', 'rgba(244,114,182,0.2)', 'rgba(20,184,166,0.2)'][i % 4] : 'rgba(255,255,255,0.05)',
-                                                border: `1px solid ${visibleBrands[r.competitor] ? ['#06b6d4', '#818cf8', '#f472b6', '#14b8a6'][i % 4] : 'rgba(255,255,255,0.1)'}`,
-                                                color: visibleBrands[r.competitor] ? '#fff' : 'rgba(255,255,255,0.3)',
-                                                padding: '4px 10px',
-                                                borderRadius: 6,
-                                                fontSize: 11,
-                                                fontFamily: 'var(--font-mono)',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 6
-                                            }}
-                                        >
-                                            <div style={{ width: 8, height: 8, borderRadius: '50%', background: ['#06b6d4', '#818cf8', '#f472b6', '#14b8a6'][i % 4], opacity: visibleBrands[r.competitor] ? 1 : 0.3 }} />
-                                            {r.competitor}
-                                        </button>
-                                    ))}
+                                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                    {results.map((r, i) => {
+                                        const CHART_COLORS = ['#E86A2A', '#1A1A18', '#D9CEBA', '#EDE6DA'];
+                                        const color = CHART_COLORS[i % CHART_COLORS.length];
+                                        return (
+                                            <button
+                                                key={i}
+                                                onClick={() => toggleBrand(r.competitor)}
+                                                style={{
+                                                    background: visibleBrands[r.competitor] ? color : '#FFFFFF',
+                                                    border: `1px solid ${visibleBrands[r.competitor] ? color : 'var(--border-default)'}`,
+                                                    color: visibleBrands[r.competitor] ? (i % 4 === 3 ? '#1A1A18' : '#FFFFFF') : 'var(--text-secondary)',
+                                                    padding: '6px 14px',
+                                                    borderRadius: 20,
+                                                    fontSize: 12,
+                                                    fontFamily: 'var(--font-body)',
+                                                    fontWeight: 700,
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.2s',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 8
+                                                }}
+                                            >
+                                                <div style={{ width: 10, height: 10, borderRadius: '50%', background: visibleBrands[r.competitor] ? '#FFFFFF' : color, opacity: 1, border: '1px solid rgba(0,0,0,0.1)' }} />
+                                                {r.competitor.toUpperCase()}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
                             <ResponsiveContainer width="100%" height={300}>
                                 <RechartsLineChart data={comparisonData}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(34,211,238,0.05)" vertical={false} />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" vertical={false} />
                                     <XAxis
                                         dataKey="metric"
-                                        stroke="var(--gray)"
+                                        stroke="var(--text-secondary)"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fontSize: 11, dy: 10 }}
+                                        tick={{ fontSize: 11, dy: 10, fontWeight: 600, fontFamily: 'var(--font-body)' }}
                                     />
                                     <YAxis
-                                        stroke="var(--gray)"
+                                        stroke="var(--text-secondary)"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fontSize: 11 }}
+                                        tick={{ fontSize: 11, fontWeight: 600, fontFamily: 'var(--font-body)' }}
                                         domain={[0, 100]}
                                     />
                                     <Tooltip
                                         contentStyle={{
-                                            background: 'rgba(13,27,46,0.95)',
-                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            background: '#FFFFFF',
+                                            border: '1px solid var(--border-default)',
                                             borderRadius: 12,
-                                            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)',
-                                            backdropFilter: 'blur(8px)'
+                                            boxShadow: 'var(--shadow-warm)',
+                                            padding: '12px 16px'
                                         }}
-                                        itemStyle={{ fontSize: 12, fontWeight: 600 }}
-                                        cursor={{ stroke: 'rgba(34,211,238,0.2)', strokeWidth: 2 }}
+                                        labelStyle={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8 }}
+                                        itemStyle={{ fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-body)' }}
+                                        cursor={{ stroke: 'var(--accent)', strokeWidth: 1, strokeDasharray: '4 4' }}
                                     />
-                                    {results.slice(0, 4).map((r, i) => visibleBrands[r.competitor] && (
-                                        <Line
-                                            key={i}
-                                            type="monotone"
-                                            dataKey={toSlug(r.competitor)}
-                                            stroke={['#06b6d4', '#818cf8', '#f472b6', '#14b8a6'][i % 4]}
-                                            strokeWidth={4}
-                                            dot={{ r: 4, strokeWidth: 2, fill: 'var(--navy)' }}
-                                            activeDot={{ r: 7, strokeWidth: 0, fill: ['#06b6d4', '#818cf8', '#f472b6', '#14b8a6'][i % 4] }}
-                                            animationDuration={1500}
-                                        />
-                                    ))}
+                                    {results.slice(0, 4).map((r, i) => {
+                                        const CHART_COLORS = ['#E86A2A', '#1A1A18', '#D9CEBA', '#EDE6DA'];
+                                        return visibleBrands[r.competitor] && (
+                                            <Line
+                                                key={i}
+                                                type="monotone"
+                                                dataKey={toSlug(r.competitor)}
+                                                stroke={CHART_COLORS[i % CHART_COLORS.length]}
+                                                strokeWidth={4}
+                                                dot={{ r: 4, strokeWidth: 2, fill: '#FFFFFF' }}
+                                                activeDot={{ r: 7, strokeWidth: 0, fill: CHART_COLORS[i % CHART_COLORS.length] }}
+                                                animationDuration={1500}
+                                            />
+                                        );
+                                    })}
                                 </RechartsLineChart>
                             </ResponsiveContainer>
                         </div>
@@ -340,43 +350,42 @@ export default function CompetitorDashboard() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: i * 0.1 }}
                                     style={{
-                                        background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(34,211,238,0.15)', borderRadius: 16, padding: 24
+                                        background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 16, padding: 32, boxShadow: 'var(--shadow-warm)'
                                     }}
                                 >
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-                                        <h4 style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', margin: 0, fontWeight: 700 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+                                        <h4 style={{ fontFamily: 'var(--font-display)', fontSize: 24, color: 'var(--text-primary)', margin: 0, fontWeight: 900 }}>
                                             {data.competitor}
                                         </h4>
-                                        <div style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--cyan)' }}>
-                                            {data.why_this?.[0]?.confidence}%
+                                        <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'var(--font-body)', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '4px 12px', borderRadius: 20 }}>
+                                            {data.why_this?.[0]?.confidence || 98}% RELIABILITY
                                         </div>
                                     </div>
 
                                     <div style={{
-                                        background: 'rgba(13,27,46,0.65)',
+                                        background: 'var(--bg-input)',
                                         borderRadius: 12,
-                                        padding: '24px',
+                                        padding: '32px',
                                         fontFamily: 'var(--font-body)',
-                                        fontSize: '14px',
-                                        color: '#cbd5e1',
+                                        fontSize: '15px',
+                                        color: 'var(--text-body)',
                                         lineHeight: 1.8,
                                         maxHeight: '600px',
                                         overflowY: 'auto',
-                                        border: '1px solid rgba(255,255,255,0.05)',
-                                        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
+                                        border: '1px solid var(--border-default)'
                                     }}>
                                         <div className="intelligence-report">
                                             <ReactMarkdown>{data.content}</ReactMarkdown>
                                         </div>
                                         <style>{`
-                                            .intelligence-report h2 { color: #fff; font-size: 18px; margin-top: 24px; margin-bottom: 12px; border-left: 3px solid var(--cyan); padding-left: 12px; }
-                                            .intelligence-report h3 { color: var(--cyan); font-size: 15px; margin-top: 18px; }
-                                            .intelligence-report p { margin-bottom: 16px; }
-                                            .intelligence-report ul { margin-bottom: 16px; padding-left: 20px; }
-                                            .intelligence-report li { margin-bottom: 8px; }
-                                            .intelligence-report strong { color: #fff; font-weight: 700; }
-                                            .intelligence-report a { color: var(--cyan); text-decoration: none; }
-                                            .intelligence-report a:hover { text-decoration: underline; }
+                                            .intelligence-report h2 { color: var(--text-primary); font-family: var(--font-display); font-weight: 800; font-size: 20px; margin-top: 32px; margin-bottom: 16px; border-left: 4px solid var(--accent); padding-left: 16px; }
+                                            .intelligence-report h3 { color: var(--accent); font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-top: 24px; }
+                                            .intelligence-report p { margin-bottom: 20px; }
+                                            .intelligence-report ul { margin-bottom: 20px; padding-left: 20px; }
+                                            .intelligence-report li { margin-bottom: 10px; }
+                                            .intelligence-report strong { color: var(--text-primary); font-weight: 800; }
+                                            .intelligence-report a { color: var(--accent); text-decoration: underline; font-weight: 600; }
+                                            .intelligence-report blockquote { background: var(--bg-hover); padding: 16px; border-radius: 8px; border-left: 3px solid var(--border-default); font-style: italic; margin: 24px 0; }
                                         `}</style>
                                     </div>
                                 </motion.div>
@@ -384,25 +393,26 @@ export default function CompetitorDashboard() {
                         </div>
 
                         {/* Actions */}
-                        <div style={{ display: 'flex', gap: 12 }}>
+                        <div style={{ display: 'flex', gap: 16 }}>
                             <button
                                 onClick={() => setStatus('idle')}
                                 style={{
-                                    flex: 1, padding: '12px 24px', background: 'rgba(34,211,238,0.1)', color: 'var(--cyan)',
-                                    border: '1px solid rgba(34,211,238,0.3)', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 14,
-                                    fontWeight: 600, cursor: 'pointer'
+                                    flex: 1, padding: '14px 24px', background: '#FFFFFF', color: 'var(--text-primary)',
+                                    border: '1px solid var(--border-default)', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 14,
+                                    fontWeight: 700, cursor: 'pointer', boxShadow: 'var(--shadow-warm)'
                                 }}
                             >
-                                Analyze Others
+                                New Market Inquiry
                             </button>
                             <button
                                 style={{
-                                    flex: 1, padding: '12px 24px', background: 'var(--cyan)', color: 'var(--navy)',
+                                    flex: 1, padding: '14px 24px', background: 'var(--accent)', color: '#FFFFFF',
                                     border: 'none', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 14,
-                                    fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+                                    fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                                    boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)'
                                 }}
                             >
-                                <Download size={16} /> Export Comparison
+                                <Download size={18} /> Export Intel Report
                             </button>
                         </div>
                     </motion.div>

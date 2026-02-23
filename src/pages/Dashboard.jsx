@@ -15,13 +15,13 @@ import {
 import CountUp from 'react-countup';
 
 const MODULE_CARDS = [
-    { label: 'Create Content', desc: 'Campaign copy, calendars & hashtag strategy', icon: Sparkles, path: '/dashboard/create-content', model: 'Gemini 1.5 Pro', color: 'var(--blue-bright)', glow: 'rgba(79,158,255,0.12)', time: '<15s' },
-    { label: 'Generate Posts', desc: 'Instagram posts & Reel scripts with images', icon: Image, path: '/dashboard/generate-posts', model: 'Gemini + DALL-E 3', color: '#f472b6', glow: 'rgba(244,114,182,0.12)', time: '<60s' },
-    { label: 'Build a Pitch', desc: 'Cold emails, sales pitch & proposal docs', icon: Presentation, path: '/dashboard/build-pitch', model: 'Groq Mixtral', color: 'var(--amber)', glow: 'rgba(245,158,11,0.12)', time: '<3s' },
-    { label: 'Analyse Competitors', desc: 'Pricing, social, product & gap analysis', icon: BarChart2, path: '/dashboard/analyse-competitors', model: 'Gemini + Live', color: 'var(--cyan)', glow: 'rgba(34,211,238,0.12)', time: '<30s', badge: 'LIVE' },
-    { label: 'Score My Leads', desc: 'AI lead scoring with next-best-action guidance', icon: Target, path: '/dashboard/score-leads', model: 'IBM watsonx', color: 'var(--green)', glow: 'rgba(16,185,129,0.12)', time: '<5s' },
-    { label: 'Practice a Sale', desc: 'Role-play with AI buyer personas', icon: MessageSquare, path: '/dashboard/practice-sale', model: 'Groq LLaMA 70B', color: 'var(--gold)', glow: 'rgba(245,158,11,0.12)', time: '<500ms' },
-    { label: 'View Intelligence', desc: 'Monday brief, forecasts & opportunity alerts', icon: Brain, path: '/dashboard/intelligence', model: 'Gemini Pro', color: '#818cf8', glow: 'rgba(129,140,248,0.12)', time: 'Weekly', badge: 'NEW' },
+    { label: 'Create Content', desc: 'Campaign copy, calendars & hashtag strategy', icon: Sparkles, path: '/dashboard/create-content', model: 'Gemini 1.5 Pro', color: '#E86A2A', glow: 'rgba(232, 106, 42, 0.08)', time: '<15s' },
+    { label: 'Social Prompts', desc: 'Instagram posts & Reel scripts with images', icon: Image, path: '/dashboard/generate-posts', model: 'Visual Brief', color: '#1A1A18', glow: 'rgba(26, 26, 24, 0.05)', time: '<60s' },
+    { label: 'Build a Pitch', desc: 'Cold emails, sales pitch & proposal docs', icon: Presentation, path: '/dashboard/build-pitch', model: 'Groq Mixtral', color: '#E86A2A', glow: 'rgba(232, 106, 42, 0.08)', time: '<3s' },
+    { label: 'Analyse Competitors', desc: 'Pricing, social, product & gap analysis', icon: BarChart2, path: '/dashboard/analyse-competitors', model: 'Gemini + Live', color: '#1A1A18', glow: 'rgba(26, 26, 24, 0.05)', time: '<30s', badge: 'LIVE' },
+    { label: 'Score My Leads', desc: 'AI lead scoring with next-best-action guidance', icon: Target, path: '/dashboard/score-leads', model: 'IBM watsonx', color: '#E86A2A', glow: 'rgba(232, 106, 42, 0.08)', time: '<5s' },
+    { label: 'Practice a Sale', desc: 'Role-play with AI buyer personas', icon: MessageSquare, path: '/dashboard/practice-sale', model: 'LLaMA 70B', color: '#1A1A18', glow: 'rgba(26, 26, 24, 0.05)', time: '<500ms' },
+    { label: 'View Intelligence', desc: 'Monday brief, forecasts & opportunity alerts', icon: Brain, path: '/dashboard/intelligence', model: 'Gemini Pro', color: '#E86A2A', glow: 'rgba(232, 106, 42, 0.08)', time: 'Weekly', badge: 'NEW' },
 ];
 
 /* ── Score Ring ── */
@@ -50,15 +50,15 @@ function ScoreRing({ score, label, color }) {
 /* ── Stat card ── */
 function KpiCard({ label, value, change, changeColor }) {
     return (
-        <div style={{ padding: '16px 18px', borderRadius: 12, background: 'rgba(22,37,64,0.5)', border: '1px solid rgba(47,128,237,0.15)', transition: 'all 0.25s' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(79,158,255,0.35)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(47,128,237,0.15)'; e.currentTarget.style.transform = ''; }}
+        <div style={{ padding: '20px', borderRadius: 12, background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)', transition: 'all 0.25s' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = ''; }}
         >
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--text-dim)', textTransform: 'uppercase', marginBottom: 8 }}>{label}</div>
-            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 28, color: '#fff', lineHeight: 1, marginBottom: 4 }}>
+            <div style={{ fontFamily: 'var(--font-body)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8 }}>{label}</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 32, color: 'var(--text-primary)', lineHeight: 1, marginBottom: 4 }}>
                 {typeof value === 'number' ? <CountUp end={value} separator="," /> : value}
             </div>
-            <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: changeColor || 'var(--green)' }}>{change}</div>
+            <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 600, color: changeColor || 'var(--success)' }}>{change}</div>
         </div>
     );
 }
@@ -79,44 +79,42 @@ export default function Dashboard() {
     const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <main style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
 
                 {/* ── Header ── */}
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 6px var(--green)', display: 'inline-block' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--green)', letterSpacing: '0.1em' }}>ALL SYSTEMS OPERATIONAL</span>
+                        <span className="pulse-dot" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 11, color: 'var(--accent)', letterSpacing: '0.1em' }}>LIVE INTELLIGENCE FEED</span>
                     </div>
-                    <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(24px,3vw,36px)', color: '#fff', marginBottom: 6, letterSpacing: '-0.02em' }}>
-                        {greeting}, {user?.name?.split(' ')[0] || 'there'} 👋
+                    <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(28px, 4vw, 42px)', color: 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.02em' }}>
+                        {greeting}, {user?.name?.split(' ')[0] || 'there'}
                     </h1>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--gray)' }}>
-                        Your AI marketing intelligence platform is ready. What do you want to generate today?
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--text-secondary)' }}>
+                        Everything is calibrated. What should we generate today?
                     </p>
                 </motion.div>
 
                 {/* ── Outcome Memory Banner ── */}
                 {memStatus && (
                     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                        style={{ marginBottom: 28, borderRadius: 14, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16, position: 'relative', overflow: 'hidden', background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(47,128,237,0.25)' }}>
-                        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 85% 50%, rgba(47,128,237,0.12), transparent 60%)' }} />
-                        <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#2F80ED,#22D3EE)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 12px rgba(79,158,255,0.35)' }}>
-                            <Zap size={18} color="#fff" fill="#fff" />
+                        style={{ marginBottom: 28, borderRadius: 14, padding: '20px', display: 'flex', alignItems: 'center', gap: 20, position: 'relative', overflow: 'hidden', background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)' }}>
+                        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 85% 50%, #FBF0E8, transparent 60%)' }} />
+                        <div style={{ width: 44, height: 44, borderRadius: 10, background: '#E86A2A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(232, 106, 42, 0.25)' }}>
+                            <Zap size={20} color="#fff" fill="#fff" />
                         </div>
                         <div style={{ flex: 1, position: 'relative' }}>
-                            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 13, color: '#fff', marginBottom: 6 }}>
-                                Outcome Memory — {memStatus.status === 'active' ? `${memStatus.rules_active} rules active` : 'Learning mode'}
-                            </p>
-                            <div style={{ height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, overflow: 'hidden', marginBottom: 4 }}>
-                                <div style={{ height: '100%', width: `${memStatus.progress_to_first_rule || 20}%`, background: 'linear-gradient(90deg,var(--blue),var(--cyan))', borderRadius: 2, transition: 'width 1s ease' }} />
-                            </div>
-                            {memStatus.status !== 'active' && (
-                                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)' }}>
-                                    Generate {memStatus.next_rule_at || 5} more outputs to activate your first AI rule
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 8 }}>
+                                <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--text-primary)' }}>
+                                    Outcome Memory — {memStatus.status === 'active' ? `${memStatus.rules_active} rules active` : 'Calibrating Context'}
                                 </p>
-                            )}
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, fontWeight: 700, color: 'var(--accent)' }}>{Math.round(memStatus.progress_to_first_rule || 20)}% COMPLETE</span>
+                            </div>
+                            <div style={{ height: 6, background: 'var(--bg-input)', borderRadius: 3, overflow: 'hidden' }}>
+                                <div style={{ height: '100%', width: `${memStatus.progress_to_first_rule || 20}%`, background: '#E86A2A', borderRadius: 3, transition: 'width 1s ease' }} />
+                            </div>
                         </div>
                     </motion.div>
                 )}
@@ -133,16 +131,16 @@ export default function Dashboard() {
                 ) : (
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 32 }}>
                         {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="shimmer" style={{ height: 96, borderRadius: 12, background: 'rgba(22,37,64,0.4)' }} />
+                            <div key={i} className="shimmer" style={{ height: 110, borderRadius: 12, background: '#FFFFFF', border: '1px solid var(--border-default)' }} />
                         ))}
                     </div>
                 )}
 
                 {/* ── Section label + module pills ── */}
-                <div style={{ marginBottom: 20 }}>
-                    <div className="drd-section-label">09 — Module Navigation</div>
-                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, color: '#fff', letterSpacing: '-0.01em' }}>
-                        Seven <span style={{ color: 'var(--blue-bright)' }}>generation modules</span>
+                <div style={{ marginBottom: 24 }}>
+                    <div className="drd-section-label" style={{ color: 'var(--text-secondary)' }}>09 — Module Navigation</div>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 24, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                        Strategic <span style={{ color: 'var(--accent)' }}>Intelligence Modules</span>
                     </h2>
                 </div>
 
@@ -152,55 +150,51 @@ export default function Dashboard() {
                             initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 + i * 0.05 }}
                         >
-                            <Link to={m.path} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 18, padding: '14px 20px', borderRadius: 11, background: 'rgba(22,37,64,0.4)', border: '1px solid rgba(47,128,237,0.14)', transition: 'all 0.22s', color: 'inherit' }}
-                                onMouseEnter={e => { e.currentTarget.style.borderColor = m.color; e.currentTarget.style.background = m.glow; e.currentTarget.style.transform = 'translateX(4px)'; }}
-                                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(47,128,237,0.14)'; e.currentTarget.style.background = 'rgba(22,37,64,0.4)'; e.currentTarget.style.transform = ''; }}
+                            <Link to={m.path} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 18, padding: '16px 24px', borderRadius: 12, background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)', transition: 'all 0.22s', color: 'inherit' }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = m.color; e.currentTarget.style.transform = 'translateX(6px)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = ''; }}
                             >
                                 {/* Icon */}
-                                <div style={{ width: 38, height: 38, borderRadius: 10, background: m.glow, border: `1px solid ${m.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <m.icon size={17} style={{ color: m.color }} />
+                                <div style={{ width: 42, height: 42, borderRadius: 10, background: m.glow, border: `1px solid ${m.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                    <m.icon size={18} style={{ color: m.color }} />
                                 </div>
-
-                                {/* Number */}
-                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)', letterSpacing: '0.06em', minWidth: 22 }}>0{i + 1}</span>
 
                                 {/* Title + desc */}
                                 <div style={{ flex: 1 }}>
-                                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 14, color: '#fff' }}>{m.label}</div>
-                                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>{m.desc}</div>
+                                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--text-primary)' }}>{m.label}</div>
+                                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>{m.desc}</div>
                                 </div>
 
                                 {/* Model tag */}
-                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.06em', color: m.color, background: m.glow, padding: '3px 8px', borderRadius: 5 }}>{m.model}</span>
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: 10, fontWeight: 700, color: m.color, background: m.glow, padding: '4px 10px', borderRadius: 20 }}>{m.model}</span>
 
                                 {/* Badge */}
-                                {m.badge && <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.06em', color: m.badge === 'NEW' ? 'var(--blue-bright)' : 'var(--amber)', background: m.badge === 'NEW' ? 'rgba(47,128,237,0.15)' : 'rgba(245,158,11,0.15)', padding: '2px 6px', borderRadius: 4 }}>{m.badge}</span>}
+                                {m.badge && <span style={{ fontFamily: 'var(--font-body)', fontSize: 9, fontWeight: 800, color: '#FFFFFF', background: m.color, padding: '3px 8px', borderRadius: 4 }}>{m.badge}</span>}
 
-                                {/* Speed + arrow */}
-                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)', minWidth: 48, textAlign: 'right' }}>↙ {m.time}</span>
-                                <ArrowRight size={13} style={{ color: 'var(--text-dim)', flexShrink: 0 }} />
+                                {/* Arrow */}
+                                <ArrowRight size={14} style={{ color: 'var(--border-default)', marginLeft: 12 }} />
                             </Link>
                         </motion.div>
                     ))}
                 </div>
 
                 {/* ── Lead Score Rings (DRD slide 08) ── */}
-                <div style={{ marginBottom: 12 }}>
-                    <div className="drd-section-label">08 — Lead Score Rings</div>
-                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 16, letterSpacing: '-0.01em' }}>
-                        Active <span style={{ color: 'var(--blue-bright)' }}>lead scores</span>
+                <div style={{ marginBottom: 16 }}>
+                    <div className="drd-section-label" style={{ color: 'var(--text-secondary)' }}>08 — Lead Score Rings</div>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 20, color: 'var(--text-primary)', marginBottom: 16, letterSpacing: '-0.01em' }}>
+                        Predictive <span style={{ color: 'var(--accent)' }}>Lead Calibration</span>
                     </h2>
                 </div>
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-                    style={{ padding: '20px 24px', borderRadius: 14, background: 'rgba(22,37,64,0.4)', border: '1px solid rgba(47,128,237,0.15)', display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
-                    <ScoreRing score={91} label="HOT" color="var(--green)" />
-                    <ScoreRing score={50} label="WARM" color="var(--amber)" />
-                    <ScoreRing score={30} label="COOL" color="var(--blue-bright)" />
-                    <ScoreRing score={10} label="COLD" color="var(--gray)" />
+                    style={{ padding: '24px', borderRadius: 14, background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)', display: 'flex', gap: 32, alignItems: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
+                    <ScoreRing score={91} label="HOT" color="var(--success)" />
+                    <ScoreRing score={50} label="WARM" color="var(--warning)" />
+                    <ScoreRing score={30} label="COOL" color="var(--accent)" />
+                    <ScoreRing score={10} label="COLD" color="var(--text-secondary)" />
                     <div style={{ flex: 1, paddingLeft: 12 }}>
-                        <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 14, color: '#fff', marginBottom: 4 }}>Acme Corp — Jamie Chen, VP Sales</div>
-                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--gray)', lineHeight: 1.6, marginBottom: 12 }}>Visited pricing page 3× this week · Matches profile of your 5 fastest-closing deals</div>
-                        <Link to="/dashboard/score-leads" style={{ display: 'inline-block', padding: '8px 14px', background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--green)', textDecoration: 'none' }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--text-primary)', marginBottom: 4 }}>Acme Corp — Jamie Chen, VP Sales</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 12 }}>Visited pricing page 3× this week · Matches profile of your 5 fastest-closing deals</div>
+                        <Link to="/dashboard/score-leads" style={{ display: 'inline-block', padding: '8px 16px', background: 'var(--success-bg)', border: '1px solid var(--success)', borderRadius: 8, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 12, color: 'var(--success)', textDecoration: 'none' }}>
                             → Send pricing PDF today
                         </Link>
                     </div>
@@ -209,30 +203,30 @@ export default function Dashboard() {
                 {/* ── Visual Section: Pipeline & Social ── */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 24, marginBottom: 40 }}>
                     {/* Pipeline Funnel */}
-                    <div style={{ padding: '24px', borderRadius: 16, background: 'rgba(22,37,64,0.4)', border: '1px solid rgba(47,128,237,0.15)' }}>
+                    <div style={{ padding: '24px', borderRadius: 16, background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)' }}>
                         <div style={{ marginBottom: 20 }}>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--blue-bright)', marginBottom: 4 }}>REVENUE FUNNEL</div>
-                            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>Conversion Pipeline</div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, color: 'var(--accent)', marginBottom: 4 }}>REVENUE FUNNEL</div>
+                            <div style={{ fontSize: 20, fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>Conversion Pipeline</div>
                         </div>
                         <div style={{ height: 260 }}>
                             <ResponsiveContainer width="100%" height="100%">
                                 <FunnelChart>
                                     <Tooltip
-                                        contentStyle={{ background: 'var(--navy)', border: '1px solid rgba(255,255,255,0.1)' }}
-                                        itemStyle={{ color: '#fff' }}
+                                        contentStyle={{ background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 8 }}
+                                        itemStyle={{ color: 'var(--text-primary)' }}
                                     />
                                     <Funnel
                                         dataKey="value"
                                         data={[
-                                            { value: 100, name: 'Prospected', fill: 'rgba(47,128,237,0.8)' },
-                                            { value: 80, name: 'Qualified', fill: 'rgba(47,128,237,0.6)' },
-                                            { value: 50, name: 'Proposal', fill: 'rgba(47,128,237,0.4)' },
-                                            { value: 30, name: 'Negotiation', fill: 'rgba(16,185,129,0.8)' },
-                                            { value: 15, name: 'Closed', fill: 'rgba(16,185,129,1.0)' },
+                                            { value: 100, name: 'Prospected', fill: '#E86A2A' },
+                                            { value: 80, name: 'Qualified', fill: '#333333' },
+                                            { value: 50, name: 'Proposal', fill: '#D9CEBA' },
+                                            { value: 30, name: 'Negotiation', fill: '#EDE6DA' },
+                                            { value: 15, name: 'Closed', fill: '#2A7A50' },
                                         ]}
                                         isAnimationActive
                                     >
-                                        <LabelList position="right" fill="var(--text-dim)" stroke="none" dataKey="name" fontSize={11} fontFamily="var(--font-mono)" />
+                                        <LabelList position="right" fill="var(--text-secondary)" stroke="none" dataKey="name" fontSize={11} fontFamily="var(--font-body)" fontWeight={600} />
                                     </Funnel>
                                 </FunnelChart>
                             </ResponsiveContainer>
@@ -240,10 +234,10 @@ export default function Dashboard() {
                     </div>
 
                     {/* Social Growth Sparkline */}
-                    <div style={{ padding: '24px', borderRadius: 16, background: 'rgba(22,37,64,0.4)', border: '1px solid rgba(47,128,237,0.15)' }}>
+                    <div style={{ padding: '24px', borderRadius: 16, background: '#FFFFFF', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)' }}>
                         <div style={{ marginBottom: 20 }}>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#f472b6', marginBottom: 4 }}>ENGAGEMENT GROWTH</div>
-                            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>Social Footprint</div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 10, color: 'var(--accent)', marginBottom: 4 }}>ENGAGEMENT GROWTH</div>
+                            <div style={{ fontSize: 18, fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>Social Footprint</div>
                         </div>
                         <div style={{ height: 160 }}>
                             <ResponsiveContainer width="100%" height="100%">
@@ -251,19 +245,19 @@ export default function Dashboard() {
                                     { day: 'M', val: 400 }, { day: 'T', val: 600 }, { day: 'W', val: 550 },
                                     { day: 'T', val: 900 }, { day: 'F', val: 1100 }, { day: 'S', val: 950 }, { day: 'S', val: 1200 }
                                 ]}>
-                                    <Area type="monotone" dataKey="val" stroke="#f472b6" fill="rgba(244,114,182,0.15)" strokeWidth={3} />
+                                    <Area type="monotone" dataKey="val" stroke="#E86A2A" fill="#FBF0E8" strokeWidth={3} />
                                     <Tooltip hide />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
                         <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                                <div style={{ fontSize: 10, color: 'var(--text-dim)', marginBottom: 2 }}>EST. REACH</div>
-                                <div style={{ fontSize: 20, fontWeight: 700, color: '#fff' }}>42.8K</div>
+                                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 2 }}>EST. REACH</div>
+                                <div style={{ fontSize: 24, fontWeight: 900, fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>42.8K</div>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: 10, color: 'var(--green)', marginBottom: 2 }}>+12.4%</div>
-                                <TrendingUp size={16} color="var(--green)" />
+                                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--success)', marginBottom: 2 }}>+12.4%</div>
+                                <TrendingUp size={20} color="var(--success)" />
                             </div>
                         </div>
                     </div>
@@ -271,25 +265,25 @@ export default function Dashboard() {
 
                 {/* ── Opportunity Alerts ── */}
                 {alerts.length > 0 && (
-                    <div>
-                        <div className="drd-section-label">ALERTS</div>
-                        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14, letterSpacing: '-0.01em' }}>
-                            🔔 Opportunity Alerts
+                    <div style={{ marginBottom: 60 }}>
+                        <div className="drd-section-label" style={{ color: 'var(--text-secondary)' }}>04 — PERSISTENT ALERTS</div>
+                        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 18, color: 'var(--text-primary)', marginBottom: 16, letterSpacing: '-0.01em' }}>
+                            🔔 Opportunity Monitoring
                         </h2>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                             {alerts.map(a => (
-                                <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 18px', borderRadius: 10, background: 'rgba(22,37,64,0.4)', border: `1px solid ${a.urgency === 'high' ? 'rgba(239,68,68,0.25)' : 'rgba(47,128,237,0.15)'}`, transition: 'all 0.2s' }}
-                                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(30,58,95,0.5)'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(22,37,64,0.4)'; }}
+                                <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 20px', borderRadius: 12, background: '#FFFFFF', border: `1px solid ${a.urgency === 'high' ? 'var(--error)' : 'var(--border-default)'}`, boxShadow: 'var(--shadow-warm)', transition: 'all 0.2s' }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
                                 >
                                     {a.urgency === 'high'
-                                        ? <AlertCircle size={16} style={{ color: 'var(--red)', flexShrink: 0 }} />
-                                        : <TrendingUp size={16} style={{ color: 'var(--amber)', flexShrink: 0 }} />}
+                                        ? <AlertCircle size={18} style={{ color: 'var(--error)', flexShrink: 0 }} />
+                                        : <TrendingUp size={18} style={{ color: 'var(--warning)', flexShrink: 0 }} />}
                                     <div style={{ flex: 1 }}>
-                                        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 13, color: '#fff', marginBottom: 2 }}>{a.title}</p>
-                                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--text-dim)' }}>→ {a.action}</p>
+                                        <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--text-primary)', marginBottom: 2 }}>{a.title}</p>
+                                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)' }}>→ {a.action}</p>
                                     </div>
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.06em', padding: '3px 8px', borderRadius: 4, background: a.urgency === 'high' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)', color: a.urgency === 'high' ? 'var(--red)' : 'var(--amber)' }}>
+                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 9, fontWeight: 800, letterSpacing: '0.06em', padding: '4px 10px', borderRadius: 20, background: a.urgency === 'high' ? 'var(--error-bg)' : 'var(--warning-bg)', color: a.urgency === 'high' ? 'var(--error)' : 'var(--warning)' }}>
                                         {a.urgency.toUpperCase()}
                                     </span>
                                 </div>

@@ -63,7 +63,7 @@ export default function ManageProducts() {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1, padding: 32, overflowY: 'auto' }}>
                 <div style={{ maxWidth: 1000, margin: '0 auto' }}>
@@ -71,20 +71,20 @@ export default function ManageProducts() {
                     <div style={{ marginBottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(129,140,248,0.15)', border: '1px solid rgba(129,140,248,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <ShoppingBag size={20} color="#818cf8" />
+                                <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <ShoppingBag size={22} color="var(--accent)" />
                                 </div>
-                                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, color: '#fff', margin: 0 }}>My Products</h1>
+                                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Global Portfolio</h1>
                             </div>
-                            <p style={{ color: 'var(--gray)', fontSize: 14, margin: 0 }}>Manage your portfolio to enable deep competitive sales analysis.</p>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: 14, margin: 0, fontWeight: 500 }}>Calibrate your assets to enable deep-context competitive analysis.</p>
                         </div>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: 32 }}>
                         {/* Form Column */}
-                        <div style={{ background: 'rgba(22,37,64,0.4)', borderRadius: 16, border: '1px solid rgba(129,140,248,0.1)', padding: 24, height: 'fit-content' }}>
-                            <h3 style={{ color: '#fff', fontSize: 16, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
-                                <Plus size={18} color="#818cf8" /> Add New Product
+                        <div style={{ background: '#FFFFFF', borderRadius: 16, border: '1px solid var(--border-default)', padding: 32, height: 'fit-content', boxShadow: 'var(--shadow-warm)' }}>
+                            <h3 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 18, marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <Plus size={20} color="var(--accent)" /> Register New Asset
                             </h3>
                             <form onSubmit={handleAdd}>
                                 <div style={{ marginBottom: 16 }}>
@@ -106,10 +106,10 @@ export default function ManageProducts() {
                                     </div>
                                 </div>
                                 <button type="submit" disabled={adding} style={{
-                                    width: '100%', padding: '12px', background: '#818cf8', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+                                    width: '100%', padding: '14px', background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)'
                                 }}>
-                                    {adding ? <Loader2 className="animate-spin" size={18} /> : 'Save Product'}
+                                    {adding ? <Loader2 className="animate-spin" size={18} /> : 'Synchronize Product'}
                                 </button>
 
                                 {success && (
@@ -127,25 +127,25 @@ export default function ManageProducts() {
                             ) : (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                     {products.map(p => (
-                                        <motion.div key={p.id} layout style={{ background: 'rgba(22,37,64,0.4)', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', padding: 20 }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+                                        <motion.div key={p.id} layout style={{ background: '#FFFFFF', borderRadius: 16, border: '1px solid var(--border-default)', padding: 24, boxShadow: 'var(--shadow-warm)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
                                                 <div>
-                                                    <h4 style={{ color: '#fff', margin: 0, fontSize: 17 }}>{p.name}</h4>
-                                                    <span style={{ fontSize: 10, color: '#818cf8', background: 'rgba(129,140,248,0.1)', padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{p.category}</span>
+                                                    <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-display)', fontWeight: 900, margin: 0, fontSize: 20 }}>{p.name}</h4>
+                                                    <span style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 700, background: 'var(--accent-soft)', padding: '3px 10px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 8, display: 'inline-block' }}>{p.category}</span>
                                                 </div>
-                                                <button onClick={() => handleDelete(p.id)} style={{ background: 'none', border: 'none', color: 'rgba(239,68,68,0.5)', cursor: 'pointer' }}>
-                                                    <Trash2 size={16} />
+                                                <button onClick={() => handleDelete(p.id)} style={{ background: 'none', border: 'none', color: 'rgba(239,68,68,0.4)', cursor: 'pointer', transition: 'all 0.2s' }}>
+                                                    <Trash2 size={18} />
                                                 </button>
                                             </div>
-                                            <p style={{ color: 'var(--gray)', fontSize: 13, lineHeight: 1.5, marginBottom: 16 }}>{p.description}</p>
-                                            <div style={{ display: 'flex', gap: 24 }}>
+                                            <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>{p.description}</p>
+                                            <div style={{ display: 'flex', gap: 32 }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                    <DollarSign size={14} color="var(--gray)" />
-                                                    <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>${p.price}</span>
+                                                    <DollarSign size={16} color="var(--text-secondary)" />
+                                                    <span style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 800 }}>${p.price}</span>
                                                 </div>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                    <TrendingUp size={14} color="var(--gray)" />
-                                                    <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>{p.sales_volume} sales</span>
+                                                    <TrendingUp size={16} color="var(--text-secondary)" />
+                                                    <span style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 800 }}>{p.sales_volume} sales</span>
                                                 </div>
                                             </div>
                                         </motion.div>

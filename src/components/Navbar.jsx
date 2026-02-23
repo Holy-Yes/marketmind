@@ -18,22 +18,22 @@ const Navbar = () => {
             height: 52,
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '0 32px',
-            background: scrolled ? 'rgba(13,27,46,0.92)' : 'linear-gradient(180deg,rgba(13,27,46,0.85) 0%,transparent 100%)',
-            backdropFilter: scrolled ? 'blur(12px)' : 'none',
-            borderBottom: scrolled ? '1px solid rgba(47,128,237,0.12)' : 'none',
-            transition: 'all 0.4s',
+            background: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'linear-gradient(180deg, rgba(237, 230, 218, 0.6) 0%, transparent 100%)',
+            backdropFilter: scrolled ? 'blur(16px)' : 'none',
+            borderBottom: scrolled ? '1px solid var(--border-default)' : 'none',
+            transition: 'all 0.5s ease',
         }}>
             {/* Logo */}
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
                 <div style={{
                     width: 32, height: 32, borderRadius: 8,
-                    background: 'linear-gradient(135deg,#2F80ED,#22D3EE)',
+                    background: 'var(--accent)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 0 14px rgba(79,158,255,0.4)',
+                    boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)',
                 }}>
                     <Zap size={16} color="#fff" fill="#fff" />
                 </div>
-                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 15, letterSpacing: '0.08em', color: '#fff' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 16, letterSpacing: '0.04em', color: 'var(--text-primary)' }}>
                     MARKETMIND
                 </span>
             </Link>
@@ -42,11 +42,11 @@ const Navbar = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="hidden md:flex">
                 {['Solutions', 'Features', 'Pricing'].map(l => (
                     <a key={l} href={`#${l.toLowerCase()}`} style={{
-                        fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500,
-                        color: 'var(--gray)', textDecoration: 'none', transition: 'color 0.2s',
+                        fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 700,
+                        color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s',
                     }}
-                        onMouseEnter={e => e.target.style.color = '#fff'}
-                        onMouseLeave={e => e.target.style.color = 'var(--gray)'}
+                        onMouseEnter={e => e.target.style.color = 'var(--accent)'}
+                        onMouseLeave={e => e.target.style.color = 'var(--text-secondary)'}
                     >{l}</a>
                 ))}
             </div>
@@ -54,20 +54,20 @@ const Navbar = () => {
             {/* Actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="hidden md:flex">
                 <Link to="/login" style={{
-                    fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500,
-                    color: 'var(--gray)', textDecoration: 'none', padding: '6px 12px',
+                    fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 700,
+                    color: 'var(--text-primary)', textDecoration: 'none', padding: '6px 12px',
                 }}>Sign in</Link>
                 <Link to="/register" style={{
-                    fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 600,
+                    fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 800,
                     color: '#fff', textDecoration: 'none',
-                    padding: '8px 20px', borderRadius: 'var(--radius-md)',
-                    background: 'var(--blue)',
-                    boxShadow: 'var(--shadow-blue)',
-                    transition: 'all 0.2s',
+                    padding: '10px 24px', borderRadius: 10,
+                    background: 'var(--accent)',
+                    boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)',
+                    transition: 'all 0.3s cubic-bezier(0.2, 0, 0, 1)',
                 }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#4F9EFF'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'var(--blue)'; e.currentTarget.style.transform = ''; }}
-                >Get Started Free →</Link>
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(232, 106, 42, 0.3)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 12px rgba(232, 106, 42, 0.2)'; }}
+                >Initialize Brief →</Link>
             </div>
 
             {/* Mobile toggle */}
@@ -79,15 +79,16 @@ const Navbar = () => {
             {open && (
                 <div style={{
                     position: 'absolute', top: 52, left: 0, right: 0,
-                    background: 'rgba(13,27,46,0.97)', backdropFilter: 'blur(12px)',
-                    borderBottom: '1px solid rgba(47,128,237,0.15)',
-                    padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 12,
+                    background: '#FFFFFF', backdropFilter: 'blur(16px)',
+                    borderBottom: '1px solid var(--border-default)',
+                    padding: '24px', display: 'flex', flexDirection: 'column', gap: 16,
+                    boxShadow: 'var(--shadow-warm)'
                 }}>
                     {['Solutions', 'Features', 'Pricing'].map(l => (
-                        <a key={l} href={`#${l.toLowerCase()}`} style={{ color: 'var(--gray)', fontFamily: 'var(--font-body)', fontSize: 15, textDecoration: 'none' }}>{l}</a>
+                        <a key={l} href={`#${l.toLowerCase()}`} style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)', fontSize: 16, fontWeight: 700, textDecoration: 'none' }}>{l}</a>
                     ))}
-                    <Link to="/login" style={{ marginTop: 8, padding: '12px 0', textAlign: 'center', background: 'var(--blue)', color: '#fff', borderRadius: 'var(--radius-md)', textDecoration: 'none', fontFamily: 'var(--font-body)', fontWeight: 600 }}>
-                        Launch Dashboard
+                    <Link to="/login" style={{ marginTop: 8, padding: '14px', textAlign: 'center', background: 'var(--accent)', color: '#fff', borderRadius: 10, textDecoration: 'none', fontFamily: 'var(--font-body)', fontWeight: 800 }}>
+                        Synthesize Now
                     </Link>
                 </div>
             )}
