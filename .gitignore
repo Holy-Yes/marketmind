@@ -12,8 +12,8 @@ lerna-debug.log*
 # -----------------------------
 # Node / Frontend
 # -----------------------------
-node_modules/
-dist/
+# node_modules/ (Kept ignored to prevent repo bloat/corruption)
+# dist/ (Included per user request)
 dist-ssr/
 *.local
 
@@ -32,18 +32,18 @@ Thumbs.db
 *.sw?
 
 # -----------------------------
-# Python
+# Python (Included per user request)
 # -----------------------------
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.db
-*.sqlite3
+# __pycache__/ 
+# *.py[cod]
 
-# Virtual Environment
+# Virtual Environment (Still ignored for portability)
 venv/
 backend/venv/
 env/
 .venv/
+
+# Config
 .env
+```
+node_modules
