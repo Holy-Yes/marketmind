@@ -12,27 +12,34 @@ export default function PracticeSale() {
     const [recording, setRecording] = useState(false);
     const [audioUrl, setAudioUrl] = useState('');
     const [followUpQuestions, setFollowUpQuestions] = useState([]);
+    const [history, setHistory] = useState([]); // Persistent back-and-forth context
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+    const clearConversation = () => {
+        setHistory([]);
+        setFollowUpQuestions([]);
+        set('product_context', '');
+    };
 
     const startRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mediaRecorder = new MediaRecorder(stream);
             audioChunksRef.current = [];
-            
+
             mediaRecorder.ondataavailable = (e) => {
                 audioChunksRef.current.push(e.data);
             };
-            
+
             mediaRecorder.onstop = () => {
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
                 const url = URL.createObjectURL(audioBlob);
                 setAudioUrl(url);
                 stream.getTracks().forEach(track => track.stop());
             };
-            
+
             mediaRecorder.start();
             mediaRecorderRef.current = mediaRecorder;
             setRecording(true);
@@ -50,18 +57,28 @@ export default function PracticeSale() {
     };
 
     const handleGenerate = async (notes, model) => {
+        const currentRepMessage = form.product_context || 'Hi, I wanted to discuss how our AI marketing platform can help your business grow.';
+
+        // Construct the full payload with history
         const payload = {
             persona: form.buyer_persona,
-            rep_message: form.product_context || 'Hi, I wanted to discuss how our AI marketing platform can help your business grow.',
-            history: [],
+            rep_message: notes ? `${currentRepMessage}\n\nRefinement: ${notes}` : currentRepMessage,
+            history: history,
             model: model
         };
-        if (notes) payload.rep_message += `\n\nRefinement: ${notes}`;
-        
+
+        console.log("🚀 [Simulator] Sending interactive payload to backend:", payload);
         const result = await api.practiceSale(payload);
-        
-        // Generate follow-up questions
+
+        // Update history for the next turn
         if (result.content) {
+            setHistory(prev => [
+                ...prev,
+                { role: 'rep', content: payload.rep_message },
+                { role: 'persona', content: result.content }
+            ]);
+
+            // Generate follow-up questions for the rep (UI/UX enhancement)
             try {
                 const qPrompt = `Based on this buyer response: "${result.content}"\n\nGenerate 3 follow-up questions the sales rep should ask. Format as a numbered list.`;
                 const qResult = await api.unified_generate?.(qPrompt, model) || {
@@ -72,7 +89,7 @@ export default function PracticeSale() {
                 console.log('Follow-up generation skipped', e);
             }
         }
-        
+
         return result;
     };
 
@@ -114,6 +131,19 @@ export default function PracticeSale() {
                     </div>
                 </div>
             </div>
+
+            {/* Clear Conversation UI */}
+            {history.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                    <button
+                        onClick={clearConversation}
+                        className="btn-drd-ghost"
+                        style={{ width: '100%', border: '1px solid rgba(239,68,68,0.3)', color: 'var(--red)', background: 'rgba(239,68,68,0.05)', fontSize: 11 }}
+                    >
+                        <Trash2 size={12} /> Reset Simulation & Memory
+                    </button>
+                </div>
+            )}
 
             {/* Voice Recording Section */}
             <div style={{ marginBottom: 24, padding: 16, background: 'rgba(34,211,238,0.05)', border: '1px solid rgba(34,211,238,0.15)', borderRadius: 12 }}>

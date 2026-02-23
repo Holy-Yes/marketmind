@@ -170,7 +170,14 @@ export default function GenerationCanvas({
             setWhyThis(result.why_this || []);
             setStatus('complete');
         } catch (err) {
-            console.error(`[Canvas] Generation Failed:`, err);
+            let errorMsg = err.message;
+            try {
+                const parsed = JSON.parse(err.message);
+                console.error(`[Canvas] Generation Failed (Server Error):`, parsed);
+                errorMsg = parsed.detail?.[0]?.msg || parsed.detail || err.message;
+            } catch (e) {
+                console.error(`[Canvas] Generation Failed (Local Error):`, err);
+            }
             setStatus('failed');
         }
     };

@@ -58,14 +58,15 @@ SIMULATOR_SYSTEM = """You are roleplaying as {name}, a {role} at a {company}.
 Your personality: {style}
 The sales rep is pitching MarketMind — an AI marketing intelligence platform for SMBs.
 
-Rules:
-- Stay completely in character at all times
-- Raise at least one relevant objection per exchange
-- Escalate scepticism if the rep gives a weak answer
-- Give buying signals (interest, questions about pricing/timeline) if the rep gives excellent answers
-- Keep responses to 3-5 sentences maximum for conversation flow
-- Never break character or mention you are an AI
-- Respond in a natural, conversational tone appropriate for a business meeting
+SYSTEM PROTOCOL:
+1. **DEEP IMMERSION**: Stay COMPLETELY in character. Use language, industry jargon, and office-culture attitudes appropriate for a {role}.
+2. **ZERO BREVITY**: Do NOT limit your responses to 3-5 sentences. Provide detailed, thoughtful, and human-like paragraphs. Explain your reasoning.
+3. **ANECDOTAL DEPTH**: Share "past experiences" or "company history" as the persona to justify your skepticism or interest. 
+4. **TACTICAL OBJECTIONS**: Don't just say "it's expensive". Explain why your budget is tight this quarter or how a previous vendor failed you.
+5. **ACTIVE DISCOVERY**: Ask the sales rep for specific technical details or ROI proof. Do not be an easy sell; make them work for your trust.
+6. **NATURAL FLOW**: Use conversational fillers (e.g., "Look, Rajesh...", "Honestly, my main concern is...", "Hmm, that's an interesting point, but...") and varying sentence structures.
+7. **NO AI DISCLOSURE**: Never mention you are an AI or are roleplaying. Focus entirely on the business value.
+8. **VARIETY & MEMORY**: Use the provided conversation history to avoid repeating yourself. If the rep asks about something you just mentioned, address it directly. Never repeat the exact same objection twice in a row.
 """
 
 DEBRIEF_PROMPT = """Analyse this sales practice session and provide a detailed debrief:
@@ -112,10 +113,16 @@ async def send_message(req: SimulatorMessageRequest, user: dict = Depends(get_cu
         role_label = "Sales Rep" if msg["role"] == "rep" else persona_data["name"]
         history_text += f"{role_label}: {msg['content']}\n"
 
-    prompt = f"""Conversation so far:
+    prompt = f"""Conversation Context:
 {history_text}
 
-Sales Rep: {req.rep_message}
+Sales Rep's Latest Turn: {req.rep_message}
+
+INSTRUCTIONS FOR THIS TURN:
+- If this is Turn 1, start with a conversational opening.
+- If there is context above, BUILD on it. Do not repeat your previous concerns if they were addressed.
+- Move the conversation forward (ask follow-ups, escalate skepticism, or show interest).
+- Vary your opening phrase and tone to keep it fresh.
 
 {persona_data['name']}:"""
 

@@ -34,7 +34,7 @@ export default function GeneratePosts() {
                     </div>
                     <div>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#f472b6', letterSpacing: '0.12em' }}>02 — INSTAGRAM STUDIO</div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', fontWeight: 700 }}>Social Content Lab</div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', fontWeight: 700 }}>Social Prompt & Concept Lab</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
@@ -108,7 +108,7 @@ export default function GeneratePosts() {
                     inputPanel={inputPanel}
                     onGenerate={handleGenerate}
                     moduleName="Post"
-                    placeholder="Your Instagram post — including AI-generated imagery, captions, and Reel scripts — will stream here."
+                    placeholder="Your Instagram post — including AI-generated image prompts, creative captions, and Reel scripts — will stream here."
                 />
             </div>
         </div>

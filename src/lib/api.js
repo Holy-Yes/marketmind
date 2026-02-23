@@ -23,8 +23,8 @@ async function request(path, options = {}) {
         const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
         console.log(`[API] ✅ Resolved ${path} with status ${res.status}`);
         if (!res.ok) {
-            const error = await res.json().catch(() => ({ detail: res.statusText }));
-            throw new Error(error.detail || 'Request failed');
+            const errorData = await res.json().catch(() => ({ detail: res.statusText }));
+            throw new Error(JSON.stringify(errorData));
         }
         return res.json();
     } catch (err) {
@@ -111,7 +111,7 @@ const api = {
     // Module 6 — Simulator
     getPersonas: () => get('/simulator/personas'),
     sendMessage: (data) => post('/simulator/message', data).then(res => ({ ...res, content: res.persona_response })),
-    practiceSale: (data) => post('/simulator/message', { persona: data.buyer_persona, rep_message: data.rep_message, history: data.history || [], model: data.model }).then(res => ({ ...res, content: res.persona_response })),
+    practiceSale: (data) => post('/simulator/message', { persona: data.persona, rep_message: data.rep_message, history: data.history || [], model: data.model }).then(res => ({ ...res, content: res.persona_response })),
     getDebrief: (data) => post('/simulator/debrief', data),
 
     // Module 7 — Intelligence

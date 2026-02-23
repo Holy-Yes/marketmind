@@ -13,7 +13,7 @@ const NAV_SECTIONS = [
     {
         label: 'MODULES', items: [
             { label: 'Create Content', icon: Sparkles, path: '/dashboard/create-content', emoji: '✦', model: 'Gemini' },
-            { label: 'Generate Posts', icon: Image, path: '/dashboard/generate-posts', emoji: '📸', model: 'DALL-E 3' },
+            { label: 'Social Prompts', icon: Image, path: '/dashboard/generate-posts', emoji: '📸', model: 'Visual Brief' },
             { label: 'Build a Pitch', icon: Presentation, path: '/dashboard/build-pitch', emoji: '📨', model: 'Groq <3s' },
             { label: 'Analyse Competitors', icon: BarChart2, path: '/dashboard/analyse-competitors', emoji: '🔍', badge: 'LIVE' },
             { label: 'My Products', icon: ShoppingBag, path: '/dashboard/products', emoji: '📦', badge: 'PRO' },
