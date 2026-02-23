@@ -1,0 +1,420 @@
+/* =========================================================
+   MarketMind — Global Design System (DRD v1.0)
+   Fonts: Syne (headings) · DM Sans (body) · JetBrains Mono (code)
+   ========================================================= */
+@import "tailwindcss";
+
+/* ── CUSTOM PROPERTIES ── */
+:root {
+  /* Colours */
+  --navy: #0D1B2E;
+  --navy-mid: #162540;
+  --navy-light: #1E3A5F;
+  --blue: #2F80ED;
+  --blue-bright: #4F9EFF;
+  --cyan: #22D3EE;
+  --gold: #F59E0B;
+  --surface: #EBF4FF;
+  --white: #FFFFFF;
+  --gray: #94A3B8;
+  --gray-light: #CBD5E1;
+  --text-dim: #64748B;
+  --green: #10B981;
+  --red: #EF4444;
+  --amber: #F59E0B;
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-blue: 0 4px 20px rgba(47, 128, 237, 0.35);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ── LIGHT MODE OVERRIDES ── */
+body.light-mode {
+  --navy: #F8FAFC;
+  --navy-mid: #FFFFFF;
+  --navy-light: #F1F5F9;
+  --surface: #DBEAFE;
+  --white: #0F172A;
+  --gray: #475569;
+  --gray-light: #64748B;
+  --text-dim: #94A3B8;
+  --color-accent: #2F80ED;
+}
+
+body.light-mode .drd-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(47, 128, 237, 0.1);
+  box-shadow: 0 4px 12px rgba(47, 128, 237, 0.05);
+}
+
+body.light-mode .drd-input {
+  background: #fff;
+  border-color: #E2E8F0;
+  color: #0F172A;
+}
+
+body.light-mode .drd-input:focus {
+  border-color: var(--blue);
+}
+
+body.light-mode .drd-label {
+  color: #64748B;
+}
+
+body.light-mode ::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+body.light-mode ::-webkit-scrollbar-thumb {
+  background: rgba(47, 128, 237, 0.2);
+}
+
+/* ── RESET ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--navy);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* ── BG GRID HELPER ── */
+.drd-grid {
+  background-image:
+    linear-gradient(rgba(47, 128, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 128, 237, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── TYPOGRAPHY ── */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ── CARDS ── */
+.drd-card {
+  background: rgba(30, 58, 95, 0.35);
+  border: 1px solid rgba(47, 128, 237, 0.18);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, background 0.3s;
+}
+
+.drd-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(79, 158, 255, 0.4), transparent);
+}
+
+.drd-card:hover {
+  border-color: rgba(79, 158, 255, 0.45);
+  background: rgba(30, 58, 95, 0.55);
+  transform: translateY(-2px);
+}
+
+/* ── BUTTONS ── */
+.btn-drd-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: var(--blue);
+  color: #fff;
+  box-shadow: var(--shadow-blue);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-drd-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(47, 128, 237, 0.5);
+}
+
+.btn-drd-primary:active {
+  transform: translateY(0);
+}
+
+.btn-drd-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: var(--blue-bright);
+  border: 1px solid rgba(79, 158, 255, 0.35);
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.btn-drd-secondary:hover {
+  border-color: var(--blue-bright);
+  background: rgba(79, 158, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.btn-drd-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: var(--gray);
+  border: none;
+  transition: color 0.2s;
+}
+
+.btn-drd-ghost:hover {
+  color: var(--white);
+}
+
+/* ── FORM INPUTS ── */
+.drd-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(13, 27, 46, 0.7);
+  border: 1px solid rgba(47, 128, 237, 0.25);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.drd-input:focus {
+  border-color: var(--blue-bright);
+  box-shadow: 0 0 0 3px rgba(79, 158, 255, 0.15);
+}
+
+.drd-input::placeholder {
+  color: var(--gray);
+}
+
+.drd-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+
+/* ── PILL / BADGE ── */
+.drd-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--blue-bright);
+  background: rgba(47, 128, 237, 0.1);
+  border: 1px solid rgba(47, 128, 237, 0.3);
+}
+
+/* ── SECTION LABEL ── */
+.drd-section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+  margin-bottom: 14px;
+}
+
+/* ── STREAMING CURSOR ── */
+.stream-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--blue-bright);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 0.8s step-end infinite;
+  box-shadow: 0 0 6px var(--blue-bright);
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── THINKING DOTS ── */
+.thinking-dots span {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue-bright);
+  margin: 0 2px;
+  animation: dot-bounce 1.2s ease infinite;
+}
+
+.thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dot-bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── SHIMMER ── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* ── PULSE DOT ── */
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue-bright);
+  box-shadow: 0 0 8px var(--blue-bright);
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--blue-bright);
+  }
+
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 16px var(--blue-bright);
+  }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--navy-mid);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(47, 128, 237, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 158, 255, 0.5);
+}
+
+/* ── UTILITY ── */
+.text-blue {
+  color: var(--blue-bright);
+}
+
+.text-gray {
+  color: var(--gray);
+}
+
+.text-dim {
+  color: var(--text-dim);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
