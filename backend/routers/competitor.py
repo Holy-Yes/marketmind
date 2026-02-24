@@ -75,14 +75,14 @@ List clickable source URLs from the grounding data with brief descriptions.
 You MUST provide unique, research-backed scores between 1-100. DO NOT use generic values like 50.
 Find specific indicators in the grounding data (e.g., pricing, reviews, market reports) to justify the differences.
 
-<MARKET_METRICS>
+IMPORTANT: At the very end of your response, provide the following JSON metrics. 
+Return ONLY the JSON object. No explanation, no markdown, and no backticks:
 {{
   "Product Quality": [SCORE],
   "Market Share": [SCORE],
   "Customer Satisfaction": [SCORE],
   "Innovation Rate": [SCORE]
 }}
-</MARKET_METRICS>
 """
 
 @router.post("/analyse")
@@ -100,9 +100,9 @@ async def analyse_competitor(req: CompetitorRequest, user: dict = Depends(get_cu
             client_sales = f"Price: ${product['price']}, Volume: {product['sales_volume']} units"
 
     try:
-        # Improved search query for better grounding data
+        # Improved search query for better grounding data (Now Async)
         search_query = f"{req.competitor_name} vs {client_product_desc} market analysis reviews 2026"
-        live_data = serp_search(search_query)
+        live_data = await serp_search(search_query)
         
         prompt = COMPETITOR_PROMPT.format(
             competitor=req.competitor_name, 
@@ -126,20 +126,24 @@ async def analyse_competitor(req: CompetitorRequest, user: dict = Depends(get_cu
         clean_content = raw_content
 
         try:
-            # Try XML-style tags first
-            tag_match = re.search(r'<MARKET_METRICS>(.*?)</MARKET_METRICS>', raw_content, re.DOTALL)
-            if tag_match:
-                extracted_json = tag_match.group(1).strip()
+            # Try to find JSON block directly
+            json_match = re.search(r'{[\s\n]*"Product Quality":.*?"Innovation Rate":[\s\d]*}', raw_content, re.DOTALL)
+            if json_match:
+                extracted_json = json_match.group(0).strip()
                 metrics.update(json.loads(extracted_json))
-                clean_content = raw_content.replace(tag_match.group(0), "").strip()
+                clean_content = raw_content.replace(extracted_json, "").strip()
+                # Remove common markers
+                clean_content = re.sub(r'<MARKET_METRICS>|</MARKET_METRICS>|\[VISUALIZATION_DATA\]', '', clean_content, flags=re.IGNORECASE).strip()
             else:
-                # Fallback to finding the first JSON-like block after a specific marker
-                json_match = re.search(r'\[VISUALIZATION_DATA\].*?({.*?})', raw_content, re.DOTALL | re.IGNORECASE)
-                if json_match:
-                    metrics.update(json.loads(json_match.group(1)))
-                    clean_content = raw_content.replace(json_match.group(0), "").strip()
+                # Try more general JSON match if specific one fails
+                fallback_json = re.search(r'\{.*Product Quality.*\}', raw_content, re.DOTALL)
+                if fallback_json:
+                    metrics.update(json.loads(fallback_json.group(0)))
+                    clean_content = raw_content.replace(fallback_json.group(0), "").strip()
         except Exception as e:
             print(f"   ⚠️ [Metrics Extraction] Failed to parse JSON: {e}")
+            # Log the raw content fragment for debugging
+            print(f"   [RAW FRAGMENT]: {raw_content[-200:]}")
 
         print(f"✅ [Competitor Intel] Analysis complete for {req.competitor_name}")
         return {

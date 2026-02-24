@@ -24,16 +24,16 @@ export default function ViewIntelligence() {
             {/* DRD Header */}
             <div style={{ marginBottom: 32 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(129,140,248,0.15)', border: '1px solid rgba(129,140,248,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Brain size={18} color="#818cf8" />
+                    <div style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Brain size={18} color="var(--accent)" />
                     </div>
                     <div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#818cf8', letterSpacing: '0.12em' }}>07 — BI INTELLIGENCE</div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', fontWeight: 700 }}>Executive Insights</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: '0.12em' }}>07 — BI INTELLIGENCE</div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--text-primary)', fontWeight: 700 }}>Executive Insights</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, background: 'rgba(129,140,248,0.15)', color: '#818cf8', padding: '2px 8px', borderRadius: 4 }}>Gemini 1.5 Pro</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, background: 'var(--accent-soft)', color: 'var(--accent)', padding: '2px 8px', borderRadius: 4 }}>Gemini 2.0 Flash</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)', padding: '2px 8px' }}>↙ LAST RUN: WEEKLY</span>
                 </div>
             </div>
@@ -42,16 +42,16 @@ export default function ViewIntelligence() {
             <div style={{ marginBottom: 32 }}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--text-dim)', marginBottom: 12 }}>CONTEXT LAYERS</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(13,27,46,0.3)', border: '1px solid rgba(129,140,248,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <PieChart size={14} color="#818cf8" />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#fff' }}>
+                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--bg-input)', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <PieChart size={14} color="var(--accent)" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-primary)' }}>
                             Business performance data linked
                         </span>
-                        <Zap size={10} color="#818cf8" style={{ marginLeft: 'auto' }} />
+                        <Zap size={10} color="var(--accent)" style={{ marginLeft: 'auto' }} />
                     </div>
-                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(13,27,46,0.3)', border: '1px solid rgba(129,140,248,0.05)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Database size={14} color="var(--text-dim)" />
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-dim)' }}>Rule Base: 12 Active Rules</span>
+                    <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--bg-surface)', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <Database size={14} color="var(--text-secondary)" />
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)' }}>Rule Base: 12 Active Rules</span>
                     </div>
                 </div>
             </div>
@@ -66,9 +66,9 @@ export default function ViewIntelligence() {
                             style={{
                                 padding: '10px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 13,
                                 transition: 'all 0.15s', cursor: 'pointer', textAlign: 'left',
-                                background: form.report_type === r ? 'rgba(129,140,248,0.15)' : 'rgba(22,37,64,0.4)',
-                                border: form.report_type === r ? '1px solid #818cf8' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.report_type === r ? '#818cf8' : 'var(--gray)', fontWeight: form.report_type === r ? 600 : 400
+                                background: form.report_type === r ? 'var(--accent)' : 'var(--bg-input)',
+                                border: form.report_type === r ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.report_type === r ? '#FFFFFF' : 'var(--text-secondary)', fontWeight: form.report_type === r ? 700 : 500
                             }}
                         >
                             {r}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AppSidebar from '../../components/AppSidebar';
 import GenerationCanvas from '../../components/GenerationCanvas';
-import api from '../../lib/api';
+import { askAI, askAIStream } from '../../services/aiService';
 import { Sparkles, Brain, Database, Zap } from 'lucide-react';
 import StyleSelector from '../../components/StyleSelector';
 
@@ -13,10 +13,28 @@ export default function CreateContent() {
     const [form, setForm] = useState({ product_description: '', goal: 'Awareness', platform: 'Instagram', tone: 'Professional', visual_style: 'photorealistic' });
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-    const handleGenerate = async (notes, model) => {
-        const payload = { ...form, goal: form.goal.toLowerCase(), platform: form.platform.toLowerCase(), tone: form.tone.toLowerCase(), model };
-        if (notes) payload.product_description += `\n\nRefinement: ${notes}`;
-        return api.generateCampaign(payload);
+    const handleGenerate = async (notes, model, onStream) => {
+        const prompt = `Generate a complete Instagram marketing campaign for:
+Product: ${form.product_description}
+Target audience: General
+Goal: ${form.goal}
+Tone: ${form.tone}
+
+${notes ? `Focus specifically on: ${notes}` : ''}
+
+Provide:
+1. Three caption variants ready to post
+2. Ten hashtags with tier labels (mega/mid/niche)
+3. Best posting time and day
+4. One visual direction suggestion
+5. One CTA recommendation`;
+
+        const result = await askAIStream(prompt, onStream);
+        if (result.success) {
+            return { content: result.data };
+        } else {
+            throw new Error(result.error);
+        }
     };
 
     const inputPanel = (
@@ -77,9 +95,9 @@ export default function CreateContent() {
                             style={{
                                 padding: '6px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                 transition: 'all 0.2s', cursor: 'pointer',
-                                background: form.goal === g ? 'var(--blue-bright)' : 'rgba(22,37,64,0.6)',
-                                border: form.goal === g ? '1px solid var(--blue-bright)' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.goal === g ? 'var(--navy)' : '#fff', fontWeight: form.goal === g ? 600 : 400
+                                background: form.goal === g ? 'var(--accent)' : 'var(--bg-input)',
+                                border: form.goal === g ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.goal === g ? '#FFFFFF' : 'var(--text-primary)', fontWeight: form.goal === g ? 600 : 400
                             }}
                         >
                             {g}
@@ -97,9 +115,9 @@ export default function CreateContent() {
                             style={{
                                 padding: '6px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                 transition: 'all 0.2s', cursor: 'pointer',
-                                background: form.platform === p ? 'var(--blue-bright)' : 'rgba(22,37,64,0.6)',
-                                border: form.platform === p ? '1px solid var(--blue-bright)' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.platform === p ? 'var(--navy)' : '#fff', fontWeight: form.platform === p ? 600 : 400
+                                background: form.platform === p ? 'var(--accent)' : 'var(--bg-input)',
+                                border: form.platform === p ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.platform === p ? '#FFFFFF' : 'var(--text-primary)', fontWeight: form.platform === p ? 600 : 400
                             }}
                         >
                             {p}
@@ -117,9 +135,9 @@ export default function CreateContent() {
                             style={{
                                 padding: '6px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                 transition: 'all 0.2s', cursor: 'pointer',
-                                background: form.tone === t ? 'var(--blue-bright)' : 'rgba(22,37,64,0.6)',
-                                border: form.tone === t ? '1px solid var(--blue-bright)' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.tone === t ? 'var(--navy)' : '#fff', fontWeight: form.tone === t ? 600 : 400
+                                background: form.tone === t ? 'var(--accent)' : 'var(--bg-input)',
+                                border: form.tone === t ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.tone === t ? '#FFFFFF' : 'var(--text-primary)', fontWeight: form.tone === t ? 600 : 400
                             }}
                         >
                             {t}
@@ -136,7 +154,7 @@ export default function CreateContent() {
     );
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1 }}>
                 <GenerationCanvas

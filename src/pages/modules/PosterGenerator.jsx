@@ -1,43 +1,58 @@
 import React, { useState } from 'react';
 import AppSidebar from '../../components/AppSidebar';
-import api from '../../lib/api';
-import { Image as ImageIcon, Sparkles, Download, RefreshCw, AlertCircle } from 'lucide-react';
+import { askAI } from '../../services/aiService';
+import { Image as ImageIcon, Sparkles, Download, RefreshCw, AlertCircle, Type } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const STYLES = ['Aesthetic', 'Bold', 'Minimalist', 'Informative', 'High-Energy', 'Luxury', 'Viral'];
 const FORMATS = ['Square (1:1)', 'Story (9:16)', 'Landscape (16:9)', 'Portrait (4:5)'];
 
 export default function PosterGenerator() {
-    const [form, setForm] = useState({ 
-        description: '', 
+    const [form, setForm] = useState({
+        description: '',
         style: 'Aesthetic',
         format: 'Square (1:1)'
     });
     const [status, setStatus] = useState('idle'); // idle | generating | complete | error
     const [generatedImage, setGeneratedImage] = useState('');
+    const [adCopy, setAdCopy] = useState('');
     const [error, setError] = useState('');
 
     const handleGenerate = async () => {
         if (!form.description.trim()) return;
-        
+
         setStatus('generating');
         setError('');
-        
+        setAdCopy('');
+
         try {
-            const response = await api.generateInstagram({
-                product_description: form.description,
-                mode: 'post',
-                visual_style: form.style.toLowerCase(),
-                goal: 'awareness'
-            });
-            
-            if (response.image_url) {
-                setGeneratedImage(response.image_url);
-                setStatus('complete');
-            } else {
-                setError('Failed to generate image. Please try again.');
-                setStatus('error');
+            // Step 1: Generate snapy Ad Copy via askAI
+            const copyPrompt = `You are a world-class copywriter. Write a snappy, 5-10 word high-impact headline for a poster about: ${form.description}. The style is ${form.style}. Respond with ONLY the headline. No quotes.`;
+            const copyRes = await askAI(copyPrompt);
+            if (copyRes.success) {
+                setAdCopy(copyRes.data);
             }
+
+            // Step 2: Generate Image via backend (As requested to keep AI unified eventually)
+            // But since image gen is specifically backend, we call api here.
+            // In a real refactor, we might want an 'askImagine' in aiService if using Gemini for images.
+            import('../../lib/api').then(async ({ default: api }) => {
+                const response = await api.generateInstagram({
+                    product_description: form.description,
+                    mode: 'post',
+                    visual_style: form.style.toLowerCase(),
+                    goal: 'awareness'
+                });
+
+                if (response.image_url) {
+                    setGeneratedImage(response.image_url);
+                    setStatus('complete');
+                } else {
+                    setError('Failed to generate image. Please try again.');
+                    setStatus('error');
+                }
+            });
+
         } catch (err) {
             setError(err.message || 'Generation failed');
             setStatus('error');
@@ -45,18 +60,18 @@ export default function PosterGenerator() {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
                 {/* Header */}
                 <div style={{ marginBottom: 40 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(244,114,182,0.15)', border: '1px solid rgba(244,114,182,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <ImageIcon size={20} color="#f472b6" />
+                        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ImageIcon size={20} color="var(--accent)" />
                         </div>
                         <div>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#f472b6', letterSpacing: '0.12em' }}>02 — POSTER GENERATOR</div>
-                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, color: '#fff', margin: 0, marginTop: 4 }}>Visual Content Studio</h1>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--accent)', letterSpacing: '0.12em' }}>02 — POSTER GENERATOR</div>
+                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, color: 'var(--text-primary)', margin: 0, marginTop: 4 }}>Visual Content Studio</h1>
                         </div>
                     </div>
                 </div>
@@ -65,7 +80,7 @@ export default function PosterGenerator() {
                     {/* Left: Input Controls */}
                     <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
                         <div style={{
-                            background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(244,114,182,0.15)', borderRadius: 16, padding: 28, display: 'flex', flexDirection: 'column', gap: 24
+                            background: '#FFFFFF', border: '1.5px solid var(--border-default)', borderRadius: 16, padding: 28, display: 'flex', flexDirection: 'column', gap: 24, boxShadow: 'var(--shadow-warm)'
                         }}>
                             <div>
                                 <label style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--gray)', display: 'block', marginBottom: 8, fontWeight: 600 }}>
@@ -76,8 +91,8 @@ export default function PosterGenerator() {
                                     value={form.description}
                                     onChange={e => setForm({ ...form, description: e.target.value })}
                                     style={{
-                                        width: '100%', minHeight: 120, padding: '12px 14px', background: 'rgba(13,27,46,0.5)',
-                                        border: '1px solid rgba(244,114,182,0.2)', borderRadius: 10, color: '#fff', fontFamily: 'var(--font-body)',
+                                        width: '100%', minHeight: 120, padding: '12px 14px', background: 'var(--bg-input)',
+                                        border: '1px solid var(--border-default)', borderRadius: 10, color: 'var(--text-primary)', fontFamily: 'var(--font-body)',
                                         fontSize: 13, lineHeight: 1.5, resize: 'none'
                                     }}
                                 />
@@ -94,9 +109,9 @@ export default function PosterGenerator() {
                                             style={{
                                                 padding: '10px 12px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                                 cursor: 'pointer',
-                                                background: form.style === s ? 'rgba(244,114,182,0.2)' : 'rgba(13,27,46,0.5)',
-                                                border: form.style === s ? '1px solid #f472b6' : '1px solid rgba(244,114,182,0.1)',
-                                                color: form.style === s ? '#f472b6' : 'var(--gray)',
+                                                background: form.style === s ? 'var(--accent)' : 'var(--bg-input)',
+                                                border: form.style === s ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                                color: form.style === s ? '#FFFFFF' : 'var(--text-secondary)',
                                                 fontWeight: form.style === s ? 600 : 400,
                                                 transition: 'all 0.2s'
                                             }}
@@ -118,9 +133,9 @@ export default function PosterGenerator() {
                                             style={{
                                                 padding: '10px 12px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                                 cursor: 'pointer',
-                                                background: form.format === f ? 'rgba(244,114,182,0.2)' : 'rgba(13,27,46,0.5)',
-                                                border: form.format === f ? '1px solid #f472b6' : '1px solid rgba(244,114,182,0.1)',
-                                                color: form.format === f ? '#f472b6' : 'var(--gray)',
+                                                background: form.format === f ? 'var(--accent)' : 'var(--bg-input)',
+                                                border: form.format === f ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                                color: form.format === f ? '#FFFFFF' : 'var(--text-secondary)',
                                                 fontWeight: form.format === f ? 600 : 400,
                                                 transition: 'all 0.2s'
                                             }}
@@ -135,11 +150,11 @@ export default function PosterGenerator() {
                                 onClick={handleGenerate}
                                 disabled={status === 'generating' || !form.description.trim()}
                                 style={{
-                                    padding: '12px 24px', background: status === 'generating' ? '#f472b650' : '#f472b6',
-                                    color: '#fff', border: 'none', borderRadius: 10, fontFamily: 'var(--font-body)',
-                                    fontSize: 14, fontWeight: 600, cursor: status === 'generating' ? 'wait' : 'pointer',
+                                    padding: '12px 24px', background: status === 'generating' ? 'var(--accent-soft)' : 'var(--accent)',
+                                    color: status === 'generating' ? 'var(--accent)' : '#fff', border: 'none', borderRadius: 10, fontFamily: 'var(--font-body)',
+                                    fontSize: 14, fontWeight: 700, cursor: status === 'generating' ? 'wait' : 'pointer',
                                     opacity: status === 'generating' || !form.description.trim() ? 0.6 : 1,
-                                    transition: 'all 0.2s'
+                                    transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)'
                                 }}
                             >
                                 {status === 'generating' ? (
@@ -154,8 +169,16 @@ export default function PosterGenerator() {
                     {/* Right: Image Preview */}
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                         <div style={{
-                            background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(244,114,182,0.15)', borderRadius: 16, padding: 28,
-                            minHeight: 500, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+                            background: '#FFFFFF',
+                            border: '1.5px solid var(--border-default)',
+                            borderRadius: 16,
+                            padding: 28,
+                            boxShadow: 'var(--shadow-warm)',
+                            minHeight: 500,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}>
                             <AnimatePresence mode="wait">
                                 {status === 'idle' && (
@@ -175,7 +198,7 @@ export default function PosterGenerator() {
                                                     key={i}
                                                     animate={{ height: [10, 30, 10] }}
                                                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.15 }}
-                                                    style={{ width: 4, background: '#f472b6', borderRadius: 2 }}
+                                                    style={{ width: 4, background: 'var(--accent)', borderRadius: 2 }}
                                                 />
                                             ))}
                                         </div>
@@ -187,8 +210,19 @@ export default function PosterGenerator() {
 
                                 {status === 'complete' && generatedImage && (
                                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ width: '100%' }}>
+                                        {adCopy && (
+                                            <div style={{
+                                                padding: '16px', background: '#FFFFFF', border: '1.5px solid #D9CEBA',
+                                                borderLeft: '3px solid var(--accent)', borderRadius: '8px', marginBottom: 20,
+                                                fontSize: '18px', color: '#1A1A18', fontWeight: 800, textAlign: 'center',
+                                                fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.05em'
+                                            }}>
+                                                {adCopy}
+                                            </div>
+                                        )}
                                         <img src={generatedImage} alt="Generated Poster" style={{
-                                            width: '100%', borderRadius: 12, marginBottom: 20, border: '1px solid rgba(244,114,182,0.2)'
+                                            width: '100%', borderRadius: 12, marginBottom: 20, border: '1.5px solid var(--border-default)',
+                                            boxShadow: 'var(--shadow-warm)'
                                         }} />
                                         <button
                                             onClick={() => {
@@ -198,10 +232,10 @@ export default function PosterGenerator() {
                                                 link.click();
                                             }}
                                             style={{
-                                                width: '100%', padding: '12px 24px', background: '#f472b6', color: '#fff',
+                                                width: '100%', padding: '12px 24px', background: 'var(--accent)', color: '#FFFFFF',
                                                 border: 'none', borderRadius: 10, fontFamily: 'var(--font-body)', fontSize: 13,
-                                                fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center',
-                                                justifyContent: 'center', gap: 8
+                                                fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center',
+                                                justifyContent: 'center', gap: 8, boxShadow: '0 4px 12px rgba(232, 106, 42, 0.2)'
                                             }}
                                         >
                                             <Download size={16} /> Download Poster

@@ -34,13 +34,18 @@ def _get_gemini():
     return _gemini_client
 
 async def gemini_generate(prompt: str) -> str:
-    """Generate a response from Gemini 1.5 Flash (Non-blocking) with retry."""
+    """Generate a response from Gemini 2.0 Flash (Non-blocking) with retry."""
     try:
         model = _get_gemini()
         # Use to_thread for blocking genai call
         response = await asyncio.to_thread(model.generate_content, prompt)
         return response.text
     except Exception as e:
+        import traceback
+        print('=== FULL ERROR ===', e)
+        print('=== MESSAGE ===', str(e))
+        print('=== STACK ===')
+        traceback.print_exc()
         err_str = str(e)
         print(f"   ⚠️ [DEBUG] Gemini Exception caught: {err_str[:100]}...")
         if any(x in err_str.upper() for x in ["429", "QUOTA", "RESOURCE_EXHAUSTED", "LIMIT_EXCEEDED"]):
@@ -90,11 +95,12 @@ def _get_groq():
         if not GROQ_API_KEY:
             raise RuntimeError("GROQ_API_KEY not set in .env file")
         from groq import Groq
+        # Initialize without proxies to avoid 'proxies' argument error in some environments
         _groq_client = Groq(api_key=GROQ_API_KEY)
     return _groq_client
 
 async def groq_generate(prompt: str, model: str = "llama-3.3-70b-versatile", system: str = "You are a helpful AI assistant.") -> str:
-    """Generate a response from Groq."""
+    """Generate a response from Groq. Raises exception on failure for fallback."""
     try:
         client = _get_groq()
         completion = client.chat.completions.create(
@@ -108,7 +114,8 @@ async def groq_generate(prompt: str, model: str = "llama-3.3-70b-versatile", sys
         )
         return completion.choices[0].message.content
     except Exception as e:
-        return f"⚠️ Groq error: {e}"
+        print(f"   ⚠️ [GROQ] Error: {e}")
+        raise e
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Unified Generation Hub

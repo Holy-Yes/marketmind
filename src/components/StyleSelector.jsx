@@ -22,7 +22,7 @@ export default function StyleSelector({ selectedStyle, onSelect }) {
                         whileTap={{ scale: 0.98 }}
                         onClick={() => onSelect(s.id)}
                         style={{
-                            padding: '10px', borderRadius: 12, background: 'rgba(22,37,64,0.4)',
+                            padding: '10px', borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-default)',
                             border: `1px solid ${selectedStyle === s.id ? 'var(--blue-bright)' : 'rgba(47,128,237,0.1)'}`,
                             cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden'
                         }}

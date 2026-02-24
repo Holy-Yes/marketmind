@@ -24,6 +24,7 @@ from routers.intelligence import router as intelligence_router
 from routers.outcome_memory import router as memory_router
 from routers.images import router as images_router
 from routers.products import router as products_router
+from routers.search import router as search_router
 
 app = FastAPI(
     title="MarketMind API",
@@ -70,6 +71,7 @@ app.include_router(intelligence_router)
 app.include_router(memory_router)
 app.include_router(images_router)
 app.include_router(products_router)
+app.include_router(search_router)
 
 
 @app.get("/")

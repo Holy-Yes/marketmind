@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import AppSidebar from '../../components/AppSidebar';
 import api from '../../lib/api';
-import { Brain, TrendingUp, BarChart3, PieChart, AlertCircle, RefreshCw, Download } from 'lucide-react';
+import { Brain, Sparkles, TrendingUp, Zap, Target, AlertCircle, TestTube, RefreshCw, BarChart3, PieChart, Download } from 'lucide-react';
+import { askAI, askAIStream } from '../../services/aiService';
+import { searchWeb } from '../../services/serpService';
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
@@ -16,6 +18,43 @@ const chartData = [
     { day: 'Sat', revenue: 2390, leads: 200, conversion: 3.1 },
     { day: 'Sun', revenue: 3490, leads: 321, conversion: 3.8 },
 ];
+
+const TestAI = () => {
+    const [result, setResult] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const test = async () => {
+        setLoading(true);
+        setResult('Testing...');
+        const res = await askAI('Say exactly this: Groq and SerpAPI are working correctly in MarketMind.');
+        setResult(res.success ? res.data : 'FAILED: ' + res.error);
+        setLoading(false);
+    };
+
+    return (
+        <div style={{ marginBottom: '24px', padding: '20px', background: '#FFFFFF', border: '1.5px solid #D9CEBA', borderRadius: '12px', boxShadow: 'var(--shadow-warm)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <TestTube size={18} color="var(--accent)" />
+                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 13, color: 'var(--text-primary)' }}>AI Connectivity Test</span>
+            </div>
+            <button
+                onClick={test}
+                disabled={loading}
+                style={{
+                    background: 'var(--accent)', color: 'white', padding: '10px 20px', border: 'none',
+                    borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: 13,
+                    opacity: loading ? 0.6 : 1
+                }}>
+                {loading ? 'Testing...' : 'Test AI Connection'}
+            </button>
+            {result && (
+                <div style={{ marginTop: '12px', padding: '14px', background: 'var(--bg-page)', border: '1px solid var(--border-default)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    {result}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default function IntelligenceDashboard() {
     const [form, setForm] = useState({ report_type: 'Weekly Brief', focus_area: '' });
@@ -41,17 +80,46 @@ export default function IntelligenceDashboard() {
     const handleGenerate = async () => {
         setStatus('loading');
         setError('');
+        setData({ content: '' });
 
         try {
-            const response = await api.getWeeklyBrief({
-                report_type: form.report_type,
-                focus_area: form.focus_area,
-                period: 'this_week',
-                model: 'gemini-1.5-pro'
+            const [industryNews, competitorNews] = await Promise.all([
+                searchWeb(`Marketing & Sales Technology market trends India this week 2024`),
+                searchWeb(`HubSpot Salesforce Gong competitor news India 2024`),
+            ]);
+
+            const webContext = [
+                ...(industryNews.data || []),
+                ...(competitorNews.data || []),
+            ].map(r => `${r.title}: ${r.snippet}`).join('\n');
+
+            const prompt = `Generate a weekly business intelligence brief for a Marketing & Sales Technology business.
+Their top product is MarketMind Intelligence Suite.
+Their main competitors are HubSpot, Salesforce, and Gong.
+
+Live market data from this week:
+${webContext}
+
+Focus Context: ${form.focus_area || 'General overview'}
+
+Write a 300 word brief with:
+1. Market Summary — what happened this week that matters
+2. Top Opportunity — one specific thing to act on now
+3. Threat to Watch — one competitor or market risk
+4. Recommended Action — the single most important thing to do next week
+
+Write in clear confident business language. Be direct and specific.`;
+
+            const result = await askAIStream(prompt, (token) => {
+                setStatus('streaming');
+                setData(prev => ({ ...prev, content: prev.content + token }));
             });
 
-            setData(response);
-            setStatus('complete');
+            if (result.success) {
+                setStatus('complete');
+            } else {
+                throw new Error(result.error);
+            }
         } catch (err) {
             setError(err.message);
             setStatus('idle');
@@ -134,19 +202,19 @@ export default function IntelligenceDashboard() {
                 {/* Loading State */}
                 {status === 'loading' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{
-                        background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(129,140,248,0.15)', borderRadius: 16, padding: 60, textAlign: 'center'
+                        background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 16, padding: 60, textAlign: 'center', boxShadow: 'var(--shadow-warm)'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginBottom: 16 }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 24 }}>
                             {[1, 2, 3, 4, 5].map(i => (
                                 <motion.div
                                     key={i}
-                                    animate={{ height: [10, 30, 10] }}
+                                    animate={{ height: [12, 40, 12] }}
                                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.15 }}
-                                    style={{ width: 4, background: '#818cf8', borderRadius: 2 }}
+                                    style={{ width: 6, background: 'var(--accent)', borderRadius: 3 }}
                                 />
                             ))}
                         </div>
-                        <p style={{ fontFamily: 'var(--font-body)', color: 'var(--gray)' }}>Generating {form.report_type}...</p>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600 }}>Synthesizing expert-level {form.report_type}...</p>
                     </motion.div>
                 )}
 
@@ -197,7 +265,10 @@ export default function IntelligenceDashboard() {
                             })}
                         </div>
 
-                        {/* Performance Chart */}
+                        {/* AI Connectivity Test */}
+                        <TestAI />
+
+                        {/* Performance Context Section */}
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -206,7 +277,7 @@ export default function IntelligenceDashboard() {
                                 background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 16, padding: 32, marginBottom: 32, boxShadow: 'var(--shadow-warm)'
                             }}
                         >
-                            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#fff', margin: '0 0 20px 0', fontWeight: 600 }}>📈 Weekly Performance Trend</h3>
+                            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--text-primary)', margin: '0 0 20px 0', fontWeight: 600 }}>📈 Weekly Performance Trend</h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <AreaChart data={chartData}>
                                     <defs>
@@ -232,8 +303,8 @@ export default function IntelligenceDashboard() {
                             background: '#FFFFFF', border: '1px solid var(--border-default)', borderRadius: 16, padding: 32, marginBottom: 32, boxShadow: 'var(--shadow-warm)'
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-                                <Brain size={18} color="#818cf8" />
-                                <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#fff', margin: 0, fontWeight: 600 }}>{form.report_type}</h3>
+                                <Brain size={18} color="var(--accent)" />
+                                <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--text-primary)', margin: 0, fontWeight: 600 }}>{form.report_type}</h3>
                             </div>
 
                             <div style={{
@@ -267,28 +338,55 @@ export default function IntelligenceDashboard() {
                         {/* Insights */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
                             {[
-                                { title: '🎯 Top Priority', text: 'Focus on increasing conversion rate through A/B testing' },
-                                { title: '📈 Growth Opportunity', text: 'Marketing automation can boost lead generation by 35%' },
-                                { title: '⚡ Quick Win', text: 'Implement email retargeting campaign this week' }
-                            ].map((insight, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3 + i * 0.1 }}
-                                    style={{
-                                        background: 'rgba(22,37,64,0.6)', border: '1px solid rgba(129,140,248,0.1)',
-                                        borderRadius: 12, padding: 16
-                                    }}
-                                >
-                                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#818cf8', margin: '0 0 8px 0', fontWeight: 600 }}>
-                                        {insight.title}
-                                    </h4>
-                                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--gray)', margin: 0, lineHeight: 1.5 }}>
-                                        {insight.text}
-                                    </p>
-                                </motion.div>
-                            ))}
+                                { title: '🎯 Top Priority', text: 'Focus on increasing conversion rate through A/B testing', type: 'priority' },
+                                { title: '📈 Growth Opportunity', text: 'Marketing automation can boost lead generation by 35%', type: 'growth' },
+                                { title: '⚡ Quick Win', text: 'Implement email retargeting campaign this week', type: 'quickwin' }
+                            ].map((insight, i) => {
+                                const styles = {
+                                    priority: { color: '#E86A2A', borderLeft: '3px solid #E86A2A' },
+                                    growth: { color: '#2A7A50', borderLeft: '3px solid #2A7A50' },
+                                    quickwin: { color: '#946010', borderLeft: '3px solid #946010' }
+                                }[insight.type];
+
+                                return (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 + i * 0.1 }}
+                                        style={{
+                                            background: '#FFFFFF',
+                                            border: '1.5px solid #D9CEBA',
+                                            borderLeft: styles.borderLeft,
+                                            borderRadius: 8,
+                                            padding: '16px 20px',
+                                            boxShadow: 'var(--shadow-warm)'
+                                        }}
+                                    >
+                                        <div style={{
+                                            fontSize: '11px',
+                                            fontWeight: 700,
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.8px',
+                                            marginBottom: '6px',
+                                            fontFamily: 'var(--font-body)',
+                                            color: styles.color
+                                        }}>
+                                            {insight.title}
+                                        </div>
+                                        <p style={{
+                                            fontSize: '13px',
+                                            fontWeight: 500,
+                                            color: '#1A1A18',
+                                            lineHeight: 1.5,
+                                            fontFamily: 'var(--font-body)',
+                                            margin: 0
+                                        }}>
+                                            {insight.text}
+                                        </p>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
 
                         {/* Actions */}
@@ -319,12 +417,25 @@ export default function IntelligenceDashboard() {
 
                 {error && (
                     <div style={{
-                        background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 12, padding: 20, display: 'flex', gap: 12
+                        background: error.toLowerCase().includes('quota') ? '#FEF3E2' : 'var(--error-bg)',
+                        border: '1.5px solid ' + (error.toLowerCase().includes('quota') ? '#EDD0A0' : 'var(--border-default)'),
+                        borderLeft: '3px solid ' + (error.toLowerCase().includes('quota') ? '#946010' : 'var(--error)'),
+                        borderRadius: 8, padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center'
                     }}>
-                        <AlertCircle size={20} color="#ef4444" style={{ flexShrink: 0 }} />
+                        <AlertCircle size={20} color={error.toLowerCase().includes('quota') ? '#946010' : 'var(--error)'} style={{ flexShrink: 0 }} />
                         <div>
-                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#fff', fontWeight: 600 }}>Generation Error</div>
-                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--gray)', margin: '4px 0 0 0' }}>{error}</p>
+                            <div style={{
+                                fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 700,
+                                color: error.toLowerCase().includes('quota') ? '#946010' : 'var(--error)', marginBottom: 2
+                            }}>
+                                {error.toLowerCase().includes('quota') ? 'Quota Limit Reached' : 'Analysis Failed'}
+                            </div>
+                            <p style={{
+                                fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500,
+                                color: error.toLowerCase().includes('quota') ? '#946010' : 'var(--text-primary)', margin: 0
+                            }}>
+                                {error}
+                            </p>
                         </div>
                     </div>
                 )}

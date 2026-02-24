@@ -38,14 +38,14 @@ function WhyThisPanel({ rules = [] }) {
                         <div style={{ padding: '8px 4px', display: 'flex', flexDirection: 'column', gap: 2 }}>
                             {rules.length === 0 ? (
                                 <div style={{ padding: '16px', textAlign: 'center' }}>
-                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)', marginBottom: 12 }}>LEARNING MODE — 1/5 OUTCOMES</div>
-                                    <div style={{ height: 4, background: 'rgba(47,128,237,0.15)', borderRadius: 2, overflow: 'hidden', width: '100%' }}>
-                                        <div style={{ height: '100%', width: '20%', background: 'var(--blue-bright)' }} />
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-placeholder)', marginBottom: 12 }}>LEARNING MODE — 1/5 OUTCOMES</div>
+                                    <div style={{ height: 4, background: 'var(--bg-hover)', borderRadius: 2, overflow: 'hidden', width: '100%' }}>
+                                        <div style={{ height: '100%', width: '20%', background: 'var(--accent)' }} />
                                     </div>
                                 </div>
                             ) : rules.map((r, i) => (
                                 <div key={i} style={{
-                                    padding: '12px 16px', borderTop: '1px solid rgba(47,128,237,0.1)',
+                                    padding: '12px 16px', borderTop: '1px solid var(--border-default)',
                                     display: 'flex', alignItems: 'center', gap: 14
                                 }}>
                                     <div style={{ width: 48, height: 4, background: 'var(--bg-input)', borderRadius: 2, overflow: 'hidden', flexShrink: 0 }}>
@@ -70,10 +70,10 @@ class ErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div style={{ padding: 40, background: 'rgba(239,68,68,0.05)', border: '1px solid var(--red)', borderRadius: 16, textAlign: 'center', margin: 40 }}>
-                    <AlertCircle size={40} color="var(--red)" style={{ marginBottom: 16 }} />
-                    <h3 style={{ color: '#fff', marginBottom: 8 }}>Interface Error</h3>
-                    <p style={{ color: 'var(--gray)', fontSize: 14, marginBottom: 20 }}>{this.state.error?.message}</p>
+                <div style={{ padding: 40, background: 'var(--error-bg)', border: '1px solid var(--error)', borderRadius: 16, textAlign: 'center', margin: 40 }}>
+                    <AlertCircle size={40} color="var(--error)" style={{ marginBottom: 16 }} />
+                    <h3 style={{ color: 'var(--text-primary)', marginBottom: 8 }}>Interface Error</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 20 }}>{this.state.error?.message}</p>
                     <button onClick={() => window.location.reload()} className="btn-drd-secondary">Reload Platform</button>
                 </div>
             );
@@ -115,8 +115,8 @@ export default function GenerationCanvas({
     const outputRef = useRef(null);
 
     const MODELS = [
-        { id: 'gemini', name: 'Gemini 1.5', provider: 'Google', color: '#E86A2A' },
-        { id: 'hugging', name: 'HF (Mistral)', provider: 'HuggingFace', color: '#1A1A18' }
+        { id: 'groq', name: 'Groq (Llama 3.3)', provider: 'Groq', color: '#E86A2A' },
+        { id: 'serp', name: 'Web-Grounded', provider: 'SerpAPI', color: '#1A1A18' }
     ];
 
     const generate = async (refinementNotes = '') => {
@@ -137,11 +137,23 @@ export default function GenerationCanvas({
             );
 
             const result = await Promise.race([
-                onGenerate(refinementNotes, selectedModel.toLowerCase()),
+                onGenerate(refinementNotes, selectedModel.toLowerCase(), (token) => {
+                    setStatus('streaming');
+                    setContent(prev => {
+                        const newContent = prev + token;
+                        if (outputRef.current) {
+                            // Delay slightly to allow React to render before scrolling
+                            setTimeout(() => {
+                                if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
+                            }, 10);
+                        }
+                        return newContent;
+                    });
+                }),
                 timeoutPromise
             ]);
 
-            console.log(`[Canvas] Received result:`, result);
+            console.log(`[Canvas] Received final result:`, result);
 
             clearInterval(progInterval);
             setProgress(100);
@@ -153,19 +165,11 @@ export default function GenerationCanvas({
                 setImageUrl(result.image_url);
             }
 
-            console.log(`[Canvas] Switching to streaming state...`);
-            setStatus('streaming');
+            // Ensure content is fully set from result in case streaming was partial or skipped
+            if (result.content) setContent(result.content);
 
-            const text = result.content || '';
-            const words = text.split(' ');
-            let displayed = '';
-
-            for (const word of words) {
-                displayed += (displayed ? ' ' : '') + word;
-                setContent(displayed);
-                if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
-                await new Promise(r => setTimeout(r, 15 + Math.random() * 10));
-            }
+            setWhyThis(result.why_this || []);
+            setStatus('complete');
 
             setWhyThis(result.why_this || []);
             setStatus('complete');
@@ -275,75 +279,55 @@ export default function GenerationCanvas({
                                 </motion.div>
                             )}
 
-                            {status === 'thinking' && (
-                                <AILoadingScreen progress={progress} />
+                            {(status === 'thinking' || status === 'streaming') && (
+                                <div style={{
+                                    padding: '16px', background: '#FBF0E8', border: '1.5px solid #F0C8A8',
+                                    borderLeft: '3px solid #E86A2A', borderRadius: '8px', fontSize: '13px',
+                                    color: '#E86A2A', fontWeight: 500, marginBottom: 20
+                                }}>
+                                    Gemini is generating your response...
+                                </div>
                             )}
 
-                            {(status === 'streaming' || status === 'complete') && (
+                            {status === 'complete' && content && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} key="output">
                                     <div style={{
-                                        fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--text-body)', lineHeight: 1.8,
-                                        maxWidth: 720, margin: '0 auto'
+                                        padding: '20px', background: '#FFFFFF', border: '1.5px solid #D9CEBA',
+                                        borderRadius: '8px', fontSize: '14px', color: '#1A1A18',
+                                        lineHeight: '1.75', whiteSpace: 'pre-wrap', fontWeight: 400,
+                                        fontFamily: 'var(--font-body)', maxWidth: 720, margin: '0 auto'
                                     }}>
-                                        <div className="prose-drd">
-                                            <ReactMarkdown>{content}</ReactMarkdown>
-                                            {status === 'streaming' && <span className="stream-cursor" />}
-                                        </div>
-
-                                        {imageUrl && (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.95 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                style={{ marginTop: 32, borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)' }}
-                                            >
-                                                <img src={imageUrl} alt="AI Generated" style={{ width: '100%', display: 'block' }} />
-                                                <div style={{ padding: '12px 18px', background: '#FFFFFF', borderTop: '1px solid var(--border-default)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-body)', letterSpacing: '0.05em' }}>GENERATED VISUAL BRIEF</span>
-                                                    <button className="btn-drd-ghost" style={{ padding: 6 }}>
-                                                        <Download size={14} />
-                                                    </button>
-                                                </div>
-                                            </motion.div>
-                                        )}
-
-                                        {status === 'complete' && (
-                                            <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <WhyThisPanel rules={whyThis} />
-                                                <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
-                                                    <button
-                                                        onClick={() => setFeedback('pos')}
-                                                        style={{
-                                                            background: feedback === 'pos' ? 'rgba(39,174,96,0.2)' : 'transparent',
-                                                            border: `1px solid ${feedback === 'pos' ? 'var(--green)' : 'rgba(255,255,255,0.1)'}`,
-                                                            padding: 8, borderRadius: 8, color: feedback === 'pos' ? 'var(--green)' : '#fff', cursor: 'pointer'
-                                                        }}
-                                                    >
-                                                        <ThumbsUp size={16} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setFeedback('neg')}
-                                                        style={{
-                                                            background: feedback === 'neg' ? 'rgba(231,76,60,0.2)' : 'transparent',
-                                                            border: `1px solid ${feedback === 'neg' ? 'var(--red)' : 'rgba(255,255,255,0.1)'}`,
-                                                            padding: 8, borderRadius: 8, color: feedback === 'neg' ? 'var(--red)' : '#fff', cursor: 'pointer'
-                                                        }}
-                                                    >
-                                                        <ThumbsDown size={16} />
-                                                    </button>
-                                                </div>
+                                        <ReactMarkdown>{content}</ReactMarkdown>
+                                    </div>
+                                    {imageUrl && (
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            style={{ marginTop: 32, borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-warm)' }}
+                                        >
+                                            <img src={imageUrl} alt="AI Generated" style={{ width: '100%', display: 'block' }} />
+                                            <div style={{ padding: '12px 18px', background: '#FFFFFF', borderTop: '1px solid var(--border-default)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-body)', letterSpacing: '0.05em' }}>GENERATED VISUAL BRIEF</span>
+                                                <button className="btn-drd-ghost" style={{ padding: 6 }}>
+                                                    <Download size={14} />
+                                                </button>
                                             </div>
-                                        )}
+                                        </motion.div>
+                                    )}
+                                    <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <WhyThisPanel rules={whyThis} />
                                     </div>
                                 </motion.div>
                             )}
 
                             {status === 'failed' && (
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                                    <AlertCircle size={40} color="var(--error)" style={{ marginBottom: 16 }} />
-                                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--text-primary)', marginBottom: 8 }}>Generation failed</p>
-                                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--text-secondary)', marginBottom: 24 }}>The AI pipeline hit a bottleneck. Please try again.</p>
-                                    <button onClick={() => generate()} className="btn-drd-primary">Retry Generation</button>
-                                </motion.div>
+                                <div style={{
+                                    padding: '16px', background: '#FDECEA', border: '1.5px solid #EBC0C0',
+                                    borderLeft: '3px solid #A02828', borderRadius: '8px', fontSize: '13px',
+                                    color: '#A02828', fontWeight: 500
+                                }}>
+                                    Error: The AI pipeline encountered an issue. Please try again.
+                                </div>
                             )}
                         </AnimatePresence>
                     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AppSidebar from '../../components/AppSidebar';
 import GenerationCanvas from '../../components/GenerationCanvas';
-import api from '../../lib/api';
+import { askAI, askAIStream } from '../../services/aiService';
 import { Image as ImageIcon, Camera, Brain, Database, Zap } from 'lucide-react';
 import StyleSelector from '../../components/StyleSelector';
 
@@ -12,16 +12,26 @@ export default function GeneratePosts() {
     const [form, setForm] = useState({ product_description: '', post_type: 'Static Post', tone: 'Aesthetic' });
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-    const handleGenerate = async (notes, model) => {
-        const mode = 'post';
-        const payload = {
-            product_description: form.product_description + (notes ? `\n\nRefinement: ${notes}` : ''),
-            mode: mode,
-            visual_style: form.tone.toLowerCase(),
-            goal: 'awareness',
-            model: model
-        };
-        return api.generateInstagram(payload);
+    const handleGenerate = async (notes, model, onStream) => {
+        const prompt = `You are a social media expert. Generate a concept and content for a ${form.post_type} about:
+${form.product_description}
+Visual Style: ${form.tone}
+${notes ? `Refinement: ${notes}` : ''}
+
+Provide:
+1. A creative concept for the post
+2. The exact caption to use
+3. 3 visual direction prompts for AI image generation
+4. Recommended posting time
+
+Make it engaging and high-conversion.`;
+
+        const result = await askAIStream(prompt, onStream);
+        if (result.success) {
+            return { content: result.data };
+        } else {
+            throw new Error(result.error);
+        }
     };
 
     const inputPanel = (

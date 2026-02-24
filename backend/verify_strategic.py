@@ -15,7 +15,7 @@ def test_competitor():
     payload = {
         "competitor_name": "HubSpot",
         "client_product_id": "prod_1",
-        "model": "gemini-1.5-flash" # Fast for testing
+        "model": "gemini-2.0-flash" # Fast for testing
     }
     # This might take a while due to AI generation
     # res = requests.post(f"{BASE_URL}/competitor/analyse", json=payload)

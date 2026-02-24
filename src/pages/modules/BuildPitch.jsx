@@ -1,24 +1,64 @@
 import React, { useState } from 'react';
 import AppSidebar from '../../components/AppSidebar';
 import GenerationCanvas from '../../components/GenerationCanvas';
-import api from '../../lib/api';
+import { askAI, askAIStream } from '../../services/aiService';
+import { searchWeb } from '../../services/serpService';
 import { Presentation, Mail, Brain, Database, Zap } from 'lucide-react';
 
 const TONES = ['Persuasive', 'Consultative', 'Direct', 'Friendly', 'Urgent'];
-const TYPES = ['Sales Pitch', 'Proposal Deck Outline', 'Follow-up'];
+const TYPES = ['Sales Pitch', 'Cold Email', 'Proposal Deck Outline', 'Follow-up'];
 
 export default function BuildPitch() {
     const [form, setForm] = useState({ prospect_company: '', meeting_context: '', pitch_type: 'Sales Pitch', tone: 'Persuasive' });
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-    const handleGenerate = async (notes, model) => {
-        const payload = {
-            prospect_company: form.prospect_company || 'Generic Company',
-            meeting_context: form.meeting_context + (notes ? `\n\nRefinement: ${notes}` : ''),
-            product_description: `Type: ${form.pitch_type}, Tone: ${form.tone}. ${form.meeting_context}`,
-            model: model
-        };
-        return api.generatePitch(payload);
+    const handleGenerate = async (notes, model, onStream) => {
+        // Step 1: Get live data about the prospect company
+        const prospectData = await searchWeb(`${form.prospect_company} challenges pain points India 2024`);
+        const context = prospectData.data?.map(r => `${r.title}: ${r.snippet}`).join('\n') || '';
+
+        let prompt = '';
+        if (form.pitch_type === 'Cold Email') {
+            prompt = `Write a cold email using the PAS framework.
+Product: MarketMind (AI Marketing Intelligence)
+Prospect company: ${form.prospect_company}
+Recent company context from web: ${context}
+Pain point context: ${form.meeting_context}
+Tone: ${form.tone}
+
+Write:
+1. Subject line (under 8 words)
+2. Complete email body (under 150 words)
+3. Three follow up subject line variants
+
+Make it personal, specific to their company context and not generic.
+${notes ? `Additional instruction: ${notes}` : ''}`;
+        } else {
+            prompt = `Generate a complete sales pitch for a meeting.
+Product being sold: MarketMind (AI Marketing Intelligence)
+Prospect company: ${form.prospect_company}
+Company context from web: ${context}
+Meeting context: ${form.meeting_context}
+Tone: ${form.tone}
+
+Write:
+1. Hook — opening statement that grabs attention in 10 seconds
+2. Problem — pain point that resonates with their industry
+3. Solution — how the product solves it in simple terms
+4. Proof — three specific proof points or outcomes
+5. Objection handlers — two likely objections and responses
+6. Close — confident closing ask
+
+Make it conversational, specific and ready to deliver.
+${notes ? `Refinement: ${notes}` : ''}`;
+        }
+
+        const result = await askAIStream(prompt, onStream);
+        if (result.success) {
+            return { content: result.data };
+        } else {
+            throw new Error(result.error);
+        }
     };
 
     const inputPanel = (
@@ -30,8 +70,8 @@ export default function BuildPitch() {
                         <Presentation size={18} color="var(--amber)" />
                     </div>
                     <div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--amber)', letterSpacing: '0.12em' }}>03 — PITCH BUILDER</div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: '#fff', fontWeight: 700 }}>Sales Intelligence</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: '0.12em' }}>03 — PITCH BUILDER</div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--text-primary)', fontWeight: 700 }}>Sales Intelligence</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
@@ -89,9 +129,10 @@ export default function BuildPitch() {
                             style={{
                                 padding: '6px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                 transition: 'all 0.2s', cursor: 'pointer',
-                                background: form.pitch_type === t ? 'var(--amber)' : 'rgba(22,37,64,0.6)',
-                                border: form.pitch_type === t ? '1px solid var(--amber)' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.pitch_type === t ? 'var(--navy)' : '#fff', fontWeight: form.pitch_type === t ? 600 : 400
+                                background: form.pitch_type === t ? 'var(--accent)' : 'var(--bg-input)',
+                                border: form.pitch_type === t ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.pitch_type === t ? '#FFFFFF' : 'var(--text-primary)',
+                                fontWeight: form.pitch_type === t ? 600 : 400
                             }}
                         >
                             {t}
@@ -109,9 +150,10 @@ export default function BuildPitch() {
                             style={{
                                 padding: '6px 14px', borderRadius: 8, fontFamily: 'var(--font-body)', fontSize: 12,
                                 transition: 'all 0.2s', cursor: 'pointer',
-                                background: form.tone === t ? 'var(--amber)' : 'rgba(22,37,64,0.6)',
-                                border: form.tone === t ? '1px solid var(--amber)' : '1px solid rgba(47,128,237,0.1)',
-                                color: form.tone === t ? 'var(--navy)' : '#fff', fontWeight: form.tone === t ? 600 : 400
+                                background: form.tone === t ? 'var(--accent)' : 'var(--bg-input)',
+                                border: form.tone === t ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+                                color: form.tone === t ? '#FFFFFF' : 'var(--text-primary)',
+                                fontWeight: form.tone === t ? 600 : 400
                             }}
                         >
                             {t}
@@ -123,7 +165,7 @@ export default function BuildPitch() {
     );
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--navy)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-page)' }}>
             <AppSidebar />
             <div style={{ flex: 1 }}>
                 <GenerationCanvas

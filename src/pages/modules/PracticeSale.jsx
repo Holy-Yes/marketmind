@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import AppSidebar from '../../components/AppSidebar';
 import GenerationCanvas from '../../components/GenerationCanvas';
-import api from '../../lib/api';
+import { askAI } from '../../services/aiService';
 import { MessageSquare, User, Brain, Database, Zap, Mic, Square, Play, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -56,41 +56,53 @@ export default function PracticeSale() {
         }
     };
 
-    const handleGenerate = async (notes, model) => {
+    const handleGenerate = async (notes) => {
         const currentRepMessage = form.product_context || 'Hi, I wanted to discuss how our AI marketing platform can help your business grow.';
+        const repMessageWithNotes = notes ? `${currentRepMessage}\n\nRefinement: ${notes}` : currentRepMessage;
 
-        // Construct the full payload with history
-        const payload = {
-            persona: form.buyer_persona,
-            rep_message: notes ? `${currentRepMessage}\n\nRefinement: ${notes}` : currentRepMessage,
-            history: history,
-            model: model
-        };
+        const conversationHistory = history
+            .map(m => `${m.role === 'rep' ? 'Salesperson' : 'Buyer'}: ${m.content}`)
+            .join('\n');
 
-        console.log("🚀 [Simulator] Sending interactive payload to backend:", payload);
-        const result = await api.practiceSale(payload);
+        const systemPrompt = `You are a tough but realistic Indian B2B buyer named ${form.buyer_persona}. 
+You are skeptical, price sensitive and have been approached by many vendors.
+The salesperson is selling: MarketMind (AI Marketing Intelligence).
+Respond as the buyer. Be realistic. Sometimes give buying signals, sometimes push back harder.
+Stay in character throughout. Never break character.`;
 
-        // Update history for the next turn
-        if (result.content) {
+        const prompt = `Continue this sales roleplay.
+        
+Conversation so far:
+${conversationHistory}
+Salesperson: ${repMessageWithNotes}
+
+Respond as the buyer.`;
+
+        const result = await askAI(prompt, systemPrompt);
+
+        if (result.success) {
             setHistory(prev => [
                 ...prev,
-                { role: 'rep', content: payload.rep_message },
-                { role: 'persona', content: result.content }
+                { role: 'rep', content: repMessageWithNotes },
+                { role: 'persona', content: result.data }
             ]);
 
-            // Generate follow-up questions for the rep (UI/UX enhancement)
+            // Generate follow-up questions
             try {
-                const qPrompt = `Based on this buyer response: "${result.content}"\n\nGenerate 3 follow-up questions the sales rep should ask. Format as a numbered list.`;
-                const qResult = await api.unified_generate?.(qPrompt, model) || {
-                    content: '1. What specific challenges are you facing today?\n2. How is this currently impacting your business?\n3. What would success look like for you?'
-                };
-                setFollowUpQuestions(qResult.content?.split('\n').filter(q => q.trim()) || []);
+                const qPrompt = `Based on this buyer response: "${result.data}"
+Generate 3 follow-up questions the sales rep should ask. Format as a numbered list.`;
+                const qResult = await askAI(qPrompt, 'You are a sales coach. Help the rep stay on track.');
+                if (qResult.success) {
+                    setFollowUpQuestions(qResult.data?.split('\n').filter(q => q.trim()) || []);
+                }
             } catch (e) {
-                console.log('Follow-up generation skipped', e);
+                console.log('Follow-up generation failed', e);
             }
-        }
 
-        return result;
+            return { content: result.data };
+        } else {
+            throw new Error(result.error);
+        }
     };
 
     const inputPanel = (

@@ -11,7 +11,7 @@ function getToken() {
     return localStorage.getItem('mm_token');
 }
 
-async function request(path, options = {}) {
+async function request(path, options = {}, retries = 3) {
     console.log(`[API] 📡 Fetching ${path}...`);
     const token = getToken();
     const headers = {
@@ -19,17 +19,33 @@ async function request(path, options = {}) {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
     };
-    try {
-        const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
-        console.log(`[API] ✅ Resolved ${path} with status ${res.status}`);
-        if (!res.ok) {
-            const errorData = await res.json().catch(() => ({ detail: res.statusText }));
-            throw new Error(JSON.stringify(errorData));
+
+    for (let i = 0; i < retries; i++) {
+        try {
+            const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+            console.log(`[API] ✅ Resolved ${path} with status ${res.status}`);
+
+            if (res.status === 429 && i < retries - 1) {
+                const delay = 2000 * (i + 1);
+                console.warn(`[API] ⚠️ Rate limited (429). Retrying in ${delay}ms...`);
+                await new Promise(r => setTimeout(r, delay));
+                continue;
+            }
+
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({ detail: res.statusText }));
+                throw new Error(JSON.stringify(errorData));
+            }
+            return res.json();
+        } catch (err) {
+            if (i === retries - 1) {
+                console.error(`[API] ❌ Failed ${path} after ${retries} attempts:`, err);
+                throw err;
+            }
+            // If it's a network error, we might want to retry too
+            console.warn(`[API] ⚠️ Attempt ${i + 1} failed. Retrying...`, err);
+            await new Promise(r => setTimeout(r, 1000));
         }
-        return res.json();
-    } catch (err) {
-        console.error(`[API] ❌ Failed ${path}:`, err);
-        throw err;
     }
 }
 
